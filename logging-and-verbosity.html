@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>6.5 Logging and Verbosity | mlr3 manual</title>
+  <meta name="description" content="6.5 Logging and Verbosity | mlr3 manual " />
+  <meta name="generator" content="bookdown 0.14 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="6.5 Logging and Verbosity | mlr3 manual" />
+  <meta property="og:type" content="book" />
+  <meta property="og:url" content="https://mlr3book.mlr-org.com" />
+  
+  
+  <meta name="github-repo" content="mlr-org/mlr3book" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="6.5 Logging and Verbosity | mlr3 manual" />
+  
+  
+  
+
+<meta name="author" content="The mlr-org Team" />
+
+
+<meta name="date" content="2019-10-17" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="paradox.html"/>
+<link rel="next" href="mlr-mlr3-transition-guide.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<link href="libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+
+
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; position: absolute; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; }
+pre.numberSource a.sourceLine:empty
+  { position: absolute; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">mlr3 Manual <img src='https://raw.githubusercontent.com/mlr-org/mlr/master/man/figures/logo_navbar.png' width='30'> </a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Quickstart</a></li>
+<li class="chapter" data-level="2" data-path="introduction-and-overview.html"><a href="introduction-and-overview.html"><i class="fa fa-check"></i><b>2</b> Introduction and Overview</a></li>
+<li class="chapter" data-level="3" data-path="basics.html"><a href="basics.html"><i class="fa fa-check"></i><b>3</b> mlr3 Basics</a><ul>
+<li class="chapter" data-level="3.1" data-path="quick-r6-intro-for-beginners.html"><a href="quick-r6-intro-for-beginners.html"><i class="fa fa-check"></i><b>3.1</b> Quick R6 Intro for Beginners</a></li>
+<li class="chapter" data-level="3.2" data-path="tasks.html"><a href="tasks.html"><i class="fa fa-check"></i><b>3.2</b> Tasks</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="tasks.html"><a href="tasks.html#task-types"><i class="fa fa-check"></i><b>3.2.1</b> Task Types</a></li>
+<li class="chapter" data-level="3.2.2" data-path="tasks.html"><a href="tasks.html#task-creation"><i class="fa fa-check"></i><b>3.2.2</b> Task Creation</a></li>
+<li class="chapter" data-level="3.2.3" data-path="tasks.html"><a href="tasks.html#predefined-tasks"><i class="fa fa-check"></i><b>3.2.3</b> Predefined tasks</a></li>
+<li class="chapter" data-level="3.2.4" data-path="tasks.html"><a href="tasks.html#task-api"><i class="fa fa-check"></i><b>3.2.4</b> Task API</a><ul>
+<li class="chapter" data-level="3.2.4.1" data-path="tasks.html"><a href="tasks.html#retrieving-data"><i class="fa fa-check"></i><b>3.2.4.1</b> Retrieving Data</a></li>
+<li class="chapter" data-level="3.2.4.2" data-path="tasks.html"><a href="tasks.html#roles-rows-and-columns"><i class="fa fa-check"></i><b>3.2.4.2</b> Roles (Rows and Columns)</a></li>
+<li class="chapter" data-level="3.2.4.3" data-path="tasks.html"><a href="tasks.html#task-mutators"><i class="fa fa-check"></i><b>3.2.4.3</b> Task Mutators</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="learners.html"><a href="learners.html"><i class="fa fa-check"></i><b>3.3</b> Learners</a><ul>
+<li class="chapter" data-level="3.3.1" data-path="learners.html"><a href="learners.html#predefined-learners"><i class="fa fa-check"></i><b>3.3.1</b> Predefined Learners</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="train-predict.html"><a href="train-predict.html"><i class="fa fa-check"></i><b>3.4</b> Train &amp; Predict</a><ul>
+<li class="chapter" data-level="3.4.1" data-path="train-predict.html"><a href="train-predict.html#basic-concept"><i class="fa fa-check"></i><b>3.4.1</b> Basic concept</a><ul>
+<li class="chapter" data-level="3.4.1.1" data-path="train-predict.html"><a href="train-predict.html#creating-task-and-learner-objects"><i class="fa fa-check"></i><b>3.4.1.1</b> Creating Task and Learner Objects</a></li>
+<li class="chapter" data-level="3.4.1.2" data-path="train-predict.html"><a href="train-predict.html#setting-up-the-traintest-splits-of-the-data-split-data"><i class="fa fa-check"></i><b>3.4.1.2</b> Setting up the train/test splits of the data (#split-data)</a></li>
+<li class="chapter" data-level="3.4.1.3" data-path="train-predict.html"><a href="train-predict.html#training-the-learner"><i class="fa fa-check"></i><b>3.4.1.3</b> Training the learner</a></li>
+<li class="chapter" data-level="3.4.1.4" data-path="train-predict.html"><a href="train-predict.html#predicting"><i class="fa fa-check"></i><b>3.4.1.4</b> Predicting</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3.5" data-path="resampling.html"><a href="resampling.html"><i class="fa fa-check"></i><b>3.5</b> Resampling</a><ul>
+<li class="chapter" data-level="3.5.1" data-path="resampling.html"><a href="resampling.html#resamp-settings"><i class="fa fa-check"></i><b>3.5.1</b> Settings</a></li>
+<li class="chapter" data-level="3.5.2" data-path="resampling.html"><a href="resampling.html#resamp-inst"><i class="fa fa-check"></i><b>3.5.2</b> Instantiation</a></li>
+<li class="chapter" data-level="3.5.3" data-path="resampling.html"><a href="resampling.html#resamp-exec"><i class="fa fa-check"></i><b>3.5.3</b> Execution</a></li>
+<li class="chapter" data-level="3.5.4" data-path="resampling.html"><a href="resampling.html#custom-resampling"><i class="fa fa-check"></i><b>3.5.4</b> Custom resampling</a></li>
+</ul></li>
+<li class="chapter" data-level="3.6" data-path="benchmarking.html"><a href="benchmarking.html"><i class="fa fa-check"></i><b>3.6</b> Benchmarking</a><ul>
+<li class="chapter" data-level="3.6.1" data-path="benchmarking.html"><a href="benchmarking.html#bm-design"><i class="fa fa-check"></i><b>3.6.1</b> Design Creation</a></li>
+<li class="chapter" data-level="3.6.2" data-path="benchmarking.html"><a href="benchmarking.html#bm-exec"><i class="fa fa-check"></i><b>3.6.2</b> Execution and Aggregation of Results</a></li>
+<li class="chapter" data-level="3.6.3" data-path="benchmarking.html"><a href="benchmarking.html#converting-specific-benchmark-objects-to-resample-objects"><i class="fa fa-check"></i><b>3.6.3</b> Converting specific benchmark objects to resample objects</a></li>
+</ul></li>
+<li class="chapter" data-level="3.7" data-path="binary.html"><a href="binary.html"><i class="fa fa-check"></i><b>3.7</b> Binary classification</a><ul>
+<li class="chapter" data-level="3.7.1" data-path="binary.html"><a href="binary.html#roc-curve-and-thresholds"><i class="fa fa-check"></i><b>3.7.1</b> ROC Curve and Thresholds</a></li>
+<li class="chapter" data-level="3.7.2" data-path="binary.html"><a href="binary.html#threshold-tuning"><i class="fa fa-check"></i><b>3.7.2</b> Threshold Tuning</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="model-optim.html"><a href="model-optim.html"><i class="fa fa-check"></i><b>4</b> Model Optimization</a><ul>
+<li class="chapter" data-level="4.1" data-path="tuning.html"><a href="tuning.html"><i class="fa fa-check"></i><b>4.1</b> Hyperparameter Tuning</a><ul>
+<li class="chapter" data-level="4.1.1" data-path="tuning.html"><a href="tuning.html#the-tuninginstance-class"><i class="fa fa-check"></i><b>4.1.1</b> The <code>TuningInstance</code> Class</a></li>
+<li class="chapter" data-level="4.1.2" data-path="tuning.html"><a href="tuning.html#the-tuner-class"><i class="fa fa-check"></i><b>4.1.2</b> The <code>Tuner</code> Class</a></li>
+<li class="chapter" data-level="4.1.3" data-path="tuning.html"><a href="tuning.html#triggering-the-tuning"><i class="fa fa-check"></i><b>4.1.3</b> Triggering the Tuning</a></li>
+<li class="chapter" data-level="4.1.4" data-path="tuning.html"><a href="tuning.html#autotuner"><i class="fa fa-check"></i><b>4.1.4</b> Automating the Tuning</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="fs.html"><a href="fs.html"><i class="fa fa-check"></i><b>4.2</b> Feature Selection / Filtering</a><ul>
+<li class="chapter" data-level="4.2.1" data-path="fs.html"><a href="fs.html#fs-filter"><i class="fa fa-check"></i><b>4.2.1</b> Filters</a></li>
+<li class="chapter" data-level="4.2.2" data-path="fs.html"><a href="fs.html#fs-calc"><i class="fa fa-check"></i><b>4.2.2</b> Calculating filter values</a></li>
+<li class="chapter" data-level="4.2.3" data-path="fs.html"><a href="fs.html#fs-var-imp-filters"><i class="fa fa-check"></i><b>4.2.3</b> Variable Importance Filters</a></li>
+<li class="chapter" data-level="4.2.4" data-path="fs.html"><a href="fs.html#fs-ensemble"><i class="fa fa-check"></i><b>4.2.4</b> Ensemble Methods</a></li>
+<li class="chapter" data-level="4.2.5" data-path="fs.html"><a href="fs.html#fs-wrapper"><i class="fa fa-check"></i><b>4.2.5</b> Wrapper Methods</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="nested-resampling.html"><a href="nested-resampling.html"><i class="fa fa-check"></i><b>4.3</b> Nested Resampling</a><ul>
+<li class="chapter" data-level="4.3.1" data-path="nested-resampling.html"><a href="nested-resampling.html#introduction"><i class="fa fa-check"></i><b>4.3.1</b> Introduction</a></li>
+<li class="chapter" data-level="4.3.2" data-path="nested-resampling.html"><a href="nested-resampling.html#execution"><i class="fa fa-check"></i><b>4.3.2</b> Execution</a></li>
+<li class="chapter" data-level="4.3.3" data-path="nested-resampling.html"><a href="nested-resampling.html#rr-eval"><i class="fa fa-check"></i><b>4.3.3</b> Evaluation</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="pipelines.html"><a href="pipelines.html"><i class="fa fa-check"></i><b>5</b> Pipelines</a></li>
+<li class="chapter" data-level="6" data-path="technical.html"><a href="technical.html"><i class="fa fa-check"></i><b>6</b> Technical</a><ul>
+<li class="chapter" data-level="6.1" data-path="parallelization.html"><a href="parallelization.html"><i class="fa fa-check"></i><b>6.1</b> Parallelization</a></li>
+<li class="chapter" data-level="6.2" data-path="error-handling.html"><a href="error-handling.html"><i class="fa fa-check"></i><b>6.2</b> Error Handling</a><ul>
+<li class="chapter" data-level="6.2.1" data-path="error-handling.html"><a href="error-handling.html#encapsulation"><i class="fa fa-check"></i><b>6.2.1</b> Encapsulation</a></li>
+<li class="chapter" data-level="6.2.2" data-path="error-handling.html"><a href="error-handling.html#fallback-learners"><i class="fa fa-check"></i><b>6.2.2</b> Fallback learners</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="backends.html"><a href="backends.html"><i class="fa fa-check"></i><b>6.3</b> Database Backends</a><ul>
+<li class="chapter" data-level="6.3.1" data-path="backends.html"><a href="backends.html#example-data"><i class="fa fa-check"></i><b>6.3.1</b> Example Data</a></li>
+<li class="chapter" data-level="6.3.2" data-path="backends.html"><a href="backends.html#preprocessing-with-dplyr"><i class="fa fa-check"></i><b>6.3.2</b> Preprocessing with <code>dplyr</code></a></li>
+<li class="chapter" data-level="6.3.3" data-path="backends.html"><a href="backends.html#databackenddplyr"><i class="fa fa-check"></i><b>6.3.3</b> DataBackendDplyr</a></li>
+<li class="chapter" data-level="6.3.4" data-path="backends.html"><a href="backends.html#model-fitting"><i class="fa fa-check"></i><b>6.3.4</b> Model fitting</a></li>
+<li class="chapter" data-level="6.3.5" data-path="backends.html"><a href="backends.html#cleanup"><i class="fa fa-check"></i><b>6.3.5</b> Cleanup</a></li>
+</ul></li>
+<li class="chapter" data-level="6.4" data-path="paradox.html"><a href="paradox.html"><i class="fa fa-check"></i><b>6.4</b> Parameters (using <code>paradox</code>)</a><ul>
+<li class="chapter" data-level="6.4.1" data-path="paradox.html"><a href="paradox.html#reference-based-objects"><i class="fa fa-check"></i><b>6.4.1</b> Reference Based Objects</a></li>
+<li class="chapter" data-level="6.4.2" data-path="paradox.html"><a href="paradox.html#defining-a-parameter-space"><i class="fa fa-check"></i><b>6.4.2</b> Defining a Parameter Space</a><ul>
+<li class="chapter" data-level="6.4.2.1" data-path="paradox.html"><a href="paradox.html#single-parameters"><i class="fa fa-check"></i><b>6.4.2.1</b> Single Parameters</a></li>
+<li class="chapter" data-level="6.4.2.2" data-path="paradox.html"><a href="paradox.html#parameter-sets"><i class="fa fa-check"></i><b>6.4.2.2</b> Parameter Sets</a></li>
+<li class="chapter" data-level="6.4.2.3" data-path="paradox.html"><a href="paradox.html#vector-parameters"><i class="fa fa-check"></i><b>6.4.2.3</b> Vector Parameters</a></li>
+</ul></li>
+<li class="chapter" data-level="6.4.3" data-path="paradox.html"><a href="paradox.html#parameter-sampling"><i class="fa fa-check"></i><b>6.4.3</b> Parameter Sampling</a><ul>
+<li class="chapter" data-level="6.4.3.1" data-path="paradox.html"><a href="paradox.html#parameter-designs"><i class="fa fa-check"></i><b>6.4.3.1</b> Parameter Designs</a></li>
+<li class="chapter" data-level="6.4.3.2" data-path="paradox.html"><a href="paradox.html#grid-design"><i class="fa fa-check"></i><b>6.4.3.2</b> Grid Design</a></li>
+<li class="chapter" data-level="6.4.3.3" data-path="paradox.html"><a href="paradox.html#random-sampling"><i class="fa fa-check"></i><b>6.4.3.3</b> Random Sampling</a></li>
+<li class="chapter" data-level="6.4.3.4" data-path="paradox.html"><a href="paradox.html#generalized-sampling-the-sampler-class"><i class="fa fa-check"></i><b>6.4.3.4</b> Generalized Sampling: The <code>Sampler</code> Class</a></li>
+</ul></li>
+<li class="chapter" data-level="6.4.4" data-path="paradox.html"><a href="paradox.html#parameter-transformation"><i class="fa fa-check"></i><b>6.4.4</b> Parameter Transformation</a><ul>
+<li class="chapter" data-level="6.4.4.1" data-path="paradox.html"><a href="paradox.html#transformation-between-types"><i class="fa fa-check"></i><b>6.4.4.1</b> Transformation between Types</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6.5" data-path="logging-and-verbosity.html"><a href="logging-and-verbosity.html"><i class="fa fa-check"></i><b>6.5</b> Logging and Verbosity</a><ul>
+<li class="chapter" data-level="6.5.1" data-path="logging-and-verbosity.html"><a href="logging-and-verbosity.html#available-logging-levels"><i class="fa fa-check"></i><b>6.5.1</b> Available logging levels</a></li>
+<li class="chapter" data-level="6.5.2" data-path="logging-and-verbosity.html"><a href="logging-and-verbosity.html#global-setting"><i class="fa fa-check"></i><b>6.5.2</b> Global Setting</a></li>
+<li class="chapter" data-level="6.5.3" data-path="logging-and-verbosity.html"><a href="logging-and-verbosity.html#changing-mlr3-logging-levels"><i class="fa fa-check"></i><b>6.5.3</b> Changing mlr3 logging levels</a></li>
+</ul></li>
+<li class="chapter" data-level="6.6" data-path="mlr-mlr3-transition-guide.html"><a href="mlr-mlr3-transition-guide.html"><i class="fa fa-check"></i><b>6.6</b> mlr -&gt; mlr3 Transition Guide</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="extending.html"><a href="extending.html"><i class="fa fa-check"></i><b>7</b> Extending</a><ul>
+<li class="chapter" data-level="7.1" data-path="extending-mlr3.html"><a href="extending-mlr3.html"><i class="fa fa-check"></i><b>7.1</b> Extending mlr3</a><ul>
+<li class="chapter" data-level="7.1.1" data-path="extending-mlr3.html"><a href="extending-mlr3.html#ext-learner"><i class="fa fa-check"></i><b>7.1.1</b> Learners</a><ul>
+<li class="chapter" data-level="7.1.1.1" data-path="extending-mlr3.html"><a href="extending-mlr3.html#learner-meta-information"><i class="fa fa-check"></i><b>7.1.1.1</b> Meta-information</a></li>
+<li class="chapter" data-level="7.1.1.2" data-path="extending-mlr3.html"><a href="extending-mlr3.html#learner-train"><i class="fa fa-check"></i><b>7.1.1.2</b> Train function</a></li>
+<li class="chapter" data-level="7.1.1.3" data-path="extending-mlr3.html"><a href="extending-mlr3.html#learner-predict"><i class="fa fa-check"></i><b>7.1.1.3</b> Predict function</a></li>
+<li class="chapter" data-level="7.1.1.4" data-path="extending-mlr3.html"><a href="extending-mlr3.html#final-learner"><i class="fa fa-check"></i><b>7.1.1.4</b> Final learner</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="extending-mlr3pipelines.html"><a href="extending-mlr3pipelines.html"><i class="fa fa-check"></i><b>7.2</b> Extending mlr3pipelines</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="special-tasks.html"><a href="special-tasks.html"><i class="fa fa-check"></i><b>8</b> Special Tasks</a><ul>
+<li class="chapter" data-level="8.1" data-path="survival.html"><a href="survival.html"><i class="fa fa-check"></i><b>8.1</b> Survival Analysis</a></li>
+<li class="chapter" data-level="8.2" data-path="spatial.html"><a href="spatial.html"><i class="fa fa-check"></i><b>8.2</b> Spatial Analysis</a></li>
+<li class="chapter" data-level="8.3" data-path="ordinal.html"><a href="ordinal.html"><i class="fa fa-check"></i><b>8.3</b> Ordinal Analysis</a></li>
+<li class="chapter" data-level="8.4" data-path="functional.html"><a href="functional.html"><i class="fa fa-check"></i><b>8.4</b> Functional Analysis</a><ul>
+<li class="chapter" data-level="8.4.1" data-path="functional.html"><a href="functional.html#how-to-model-functional-data"><i class="fa fa-check"></i><b>8.4.1</b> How to model functional data?</a></li>
+</ul></li>
+<li class="chapter" data-level="8.5" data-path="multilabel.html"><a href="multilabel.html"><i class="fa fa-check"></i><b>8.5</b> Multilabel Classification</a></li>
+<li class="chapter" data-level="8.6" data-path="cost-sens.html"><a href="cost-sens.html"><i class="fa fa-check"></i><b>8.6</b> Cost-Sensitive Classification</a><ul>
+<li class="chapter" data-level="8.6.1" data-path="cost-sens.html"><a href="cost-sens.html#a-first-model"><i class="fa fa-check"></i><b>8.6.1</b> A First Model</a></li>
+<li class="chapter" data-level="8.6.2" data-path="cost-sens.html"><a href="cost-sens.html#cost-sensitive-measure"><i class="fa fa-check"></i><b>8.6.2</b> Cost-sensitive Measure</a></li>
+<li class="chapter" data-level="8.6.3" data-path="cost-sens.html"><a href="cost-sens.html#thresholding"><i class="fa fa-check"></i><b>8.6.3</b> Thresholding</a></li>
+<li class="chapter" data-level="8.6.4" data-path="cost-sens.html"><a href="cost-sens.html#threshold-tuning-1"><i class="fa fa-check"></i><b>8.6.4</b> Threshold Tuning</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="model-interpr.html"><a href="model-interpr.html"><i class="fa fa-check"></i><b>9</b> Model Interpretation with mlr3</a><ul>
+<li class="chapter" data-level="9.1" data-path="iml.html"><a href="iml.html"><i class="fa fa-check"></i><b>9.1</b> IML</a></li>
+<li class="chapter" data-level="9.2" data-path="dalex.html"><a href="dalex.html"><i class="fa fa-check"></i><b>9.2</b> Dalex</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="use-cases.html"><a href="use-cases.html"><i class="fa fa-check"></i><b>10</b> Use Cases</a><ul>
+<li class="chapter" data-level="10.1" data-path="use-case-regr-houses.html"><a href="use-case-regr-houses.html"><i class="fa fa-check"></i><b>10.1</b> House Price Prediction in King County</a><ul>
+<li class="chapter" data-level="10.1.1" data-path="use-case-regr-houses.html"><a href="use-case-regr-houses.html#exploratory-data-analysis"><i class="fa fa-check"></i><b>10.1.1</b> Exploratory Data Analysis</a><ul>
+<li class="chapter" data-level="10.1.1.1" data-path="use-case-regr-houses.html"><a href="use-case-regr-houses.html#distribution-of-the-price"><i class="fa fa-check"></i><b>10.1.1.1</b> Distribution of the price:</a></li>
+<li class="chapter" data-level="10.1.1.2" data-path="use-case-regr-houses.html"><a href="use-case-regr-houses.html#association-between-variables"><i class="fa fa-check"></i><b>10.1.1.2</b> Association between variables</a></li>
+</ul></li>
+<li class="chapter" data-level="10.1.2" data-path="use-case-regr-houses.html"><a href="use-case-regr-houses.html#splitting-into-train-and-test-data"><i class="fa fa-check"></i><b>10.1.2</b> Splitting into train and test data</a></li>
+<li class="chapter" data-level="10.1.3" data-path="use-case-regr-houses.html"><a href="use-case-regr-houses.html#a-first-model-decision-tree"><i class="fa fa-check"></i><b>10.1.3</b> A first model: Decision Tree</a></li>
+<li class="chapter" data-level="10.1.4" data-path="use-case-regr-houses.html"><a href="use-case-regr-houses.html#a-first-baseline-decision-tree"><i class="fa fa-check"></i><b>10.1.4</b> A first baseline: Decision Tree</a></li>
+<li class="chapter" data-level="10.1.5" data-path="use-case-regr-houses.html"><a href="use-case-regr-houses.html#many-trees-random-forest"><i class="fa fa-check"></i><b>10.1.5</b> Many Trees: Random Forest</a></li>
+<li class="chapter" data-level="10.1.6" data-path="use-case-regr-houses.html"><a href="use-case-regr-houses.html#a-better-baseline-autotuner"><i class="fa fa-check"></i><b>10.1.6</b> A better baseline: <code>AutoTuner</code></a></li>
+<li class="chapter" data-level="10.1.7" data-path="use-case-regr-houses.html"><a href="use-case-regr-houses.html#engineering-features-mutating-zip-codes"><i class="fa fa-check"></i><b>10.1.7</b> Engineering Features: Mutating ZIP-Codes</a></li>
+<li class="chapter" data-level="10.1.8" data-path="use-case-regr-houses.html"><a href="use-case-regr-houses.html#obtaining-a-sparser-model"><i class="fa fa-check"></i><b>10.1.8</b> Obtaining a sparser model</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="appendix.html"><a href="appendix.html"><i class="fa fa-check"></i><b>11</b> Appendix</a><ul>
+<li class="chapter" data-level="11.1" data-path="list-learners.html"><a href="list-learners.html"><i class="fa fa-check"></i><b>11.1</b> Integrated Learners</a></li>
+<li class="chapter" data-level="11.2" data-path="list-filters.html"><a href="list-filters.html"><i class="fa fa-check"></i><b>11.2</b> Integrated Filter Methods</a><ul>
+<li class="chapter" data-level="11.2.1" data-path="list-filters.html"><a href="list-filters.html#fs-filter-list"><i class="fa fa-check"></i><b>11.2.1</b> Standalone filter methods</a></li>
+<li class="chapter" data-level="11.2.2" data-path="list-filters.html"><a href="list-filters.html#fs-filter-embedded-list"><i class="fa fa-check"></i><b>11.2.2</b> Algorithms With Embedded Filter Methods</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="./">Made with <i class="fas fa-heart"></i> for open-source </a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">mlr3 manual <img src='https://raw.githubusercontent.com/mlr-org/mlr/master/man/figures/logo_navbar.png' width='50'></a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="logging-and-verbosity" class="section level2">
+<h2><span class="header-section-number">6.5</span> Logging and Verbosity</h2>
+<p>We use the <a href="https://cran.r-project.org/package=lgr">lgr</a> package for logging and progress output.
+Because <em>lgr</em> comes with its own exhaustive vignette, we will just briefly give examples how you can change the most important settings related to logging in <a href="https://mlr3.mlr-org.com">mlr3</a>.</p>
+<div id="available-logging-levels" class="section level3">
+<h3><span class="header-section-number">6.5.1</span> Available logging levels</h3>
+<p><em>lgr</em> comes with certain numeric thresholds which correspond to verbosity levels of the logging.
+For <a href="https://mlr3.mlr-org.com">mlr3</a> the default is set to 400 which corresponds to level “info”.
+The following ones are available:</p>
+<div class="sourceCode" id="cb145"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb145-1" data-line-number="1"><span class="kw">library</span>(<span class="st">&quot;lgr&quot;</span>)</a>
+<a class="sourceLine" id="cb145-2" data-line-number="2"><span class="kw">getOption</span>(<span class="st">&quot;lgr.log_levels&quot;</span>)</a>
+<a class="sourceLine" id="cb145-3" data-line-number="3">## fatal error  warn  info debug trace </a>
+<a class="sourceLine" id="cb145-4" data-line-number="4">##   100   200   300   400   500   600</a></code></pre></div>
+</div>
+<div id="global-setting" class="section level3">
+<h3><span class="header-section-number">6.5.2</span> Global Setting</h3>
+<p><em>lgr</em> comes with a global option called <code>&quot;lgr.default_threshold&quot;</code> which can be set via <code>options()</code>.
+You can set a specific level in your <code>.Rprofile</code> which is then used for all packages that use the <em>lgr</em> package.
+This approach may not be desirable if you want to only change the logging level for <a href="https://mlr3.mlr-org.com">mlr3</a>.</p>
+</div>
+<div id="changing-mlr3-logging-levels" class="section level3">
+<h3><span class="header-section-number">6.5.3</span> Changing mlr3 logging levels</h3>
+<p>To change the setting for <a href="https://mlr3.mlr-org.com">mlr3</a> only, you need to change the threshold of the <a href="https://mlr3.mlr-org.com">mlr3</a> logger like this:</p>
+<div class="sourceCode" id="cb146"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb146-1" data-line-number="1">lgr<span class="op">::</span><span class="kw">get_logger</span>(<span class="st">&quot;mlr3&quot;</span>)<span class="op">$</span><span class="kw">set_threshold</span>(<span class="st">&quot;&lt;level&gt;&quot;</span>)<span class="st">`</span></a></code></pre></div>
+<p>Remember that this change only applies to the current R session.</p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="paradox.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="mlr-mlr3-transition-guide.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": true,
+"facebook": false,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/mlr-org/mlr3book/edit/master/bookdown/04-technical/04-logging.Rmd",
+"text": "Edit this chapter"
+},
+"history": {
+"link": "https://github.com/mlr-org/mlr3book/commits/master/04-technical/04-logging.Rmd",
+"text": "Edit history"
+},
+"download": {},
+"toc": {
+"collapse": "section"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

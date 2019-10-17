@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>10.1 House Price Prediction in King County | mlr3 manual</title>
+  <meta name="description" content="10.1 House Price Prediction in King County | mlr3 manual " />
+  <meta name="generator" content="bookdown 0.14 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="10.1 House Price Prediction in King County | mlr3 manual" />
+  <meta property="og:type" content="book" />
+  <meta property="og:url" content="https://mlr3book.mlr-org.com" />
+  
+  
+  <meta name="github-repo" content="mlr-org/mlr3book" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="10.1 House Price Prediction in King County | mlr3 manual" />
+  
+  
+  
+
+<meta name="author" content="The mlr-org Team" />
+
+
+<meta name="date" content="2019-10-17" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="use-cases.html"/>
+<link rel="next" href="appendix.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<link href="libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+
+
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; position: absolute; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; }
+pre.numberSource a.sourceLine:empty
+  { position: absolute; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">mlr3 Manual <img src='https://raw.githubusercontent.com/mlr-org/mlr/master/man/figures/logo_navbar.png' width='30'> </a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Quickstart</a></li>
+<li class="chapter" data-level="2" data-path="introduction-and-overview.html"><a href="introduction-and-overview.html"><i class="fa fa-check"></i><b>2</b> Introduction and Overview</a></li>
+<li class="chapter" data-level="3" data-path="basics.html"><a href="basics.html"><i class="fa fa-check"></i><b>3</b> mlr3 Basics</a><ul>
+<li class="chapter" data-level="3.1" data-path="quick-r6-intro-for-beginners.html"><a href="quick-r6-intro-for-beginners.html"><i class="fa fa-check"></i><b>3.1</b> Quick R6 Intro for Beginners</a></li>
+<li class="chapter" data-level="3.2" data-path="tasks.html"><a href="tasks.html"><i class="fa fa-check"></i><b>3.2</b> Tasks</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="tasks.html"><a href="tasks.html#task-types"><i class="fa fa-check"></i><b>3.2.1</b> Task Types</a></li>
+<li class="chapter" data-level="3.2.2" data-path="tasks.html"><a href="tasks.html#task-creation"><i class="fa fa-check"></i><b>3.2.2</b> Task Creation</a></li>
+<li class="chapter" data-level="3.2.3" data-path="tasks.html"><a href="tasks.html#predefined-tasks"><i class="fa fa-check"></i><b>3.2.3</b> Predefined tasks</a></li>
+<li class="chapter" data-level="3.2.4" data-path="tasks.html"><a href="tasks.html#task-api"><i class="fa fa-check"></i><b>3.2.4</b> Task API</a><ul>
+<li class="chapter" data-level="3.2.4.1" data-path="tasks.html"><a href="tasks.html#retrieving-data"><i class="fa fa-check"></i><b>3.2.4.1</b> Retrieving Data</a></li>
+<li class="chapter" data-level="3.2.4.2" data-path="tasks.html"><a href="tasks.html#roles-rows-and-columns"><i class="fa fa-check"></i><b>3.2.4.2</b> Roles (Rows and Columns)</a></li>
+<li class="chapter" data-level="3.2.4.3" data-path="tasks.html"><a href="tasks.html#task-mutators"><i class="fa fa-check"></i><b>3.2.4.3</b> Task Mutators</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="learners.html"><a href="learners.html"><i class="fa fa-check"></i><b>3.3</b> Learners</a><ul>
+<li class="chapter" data-level="3.3.1" data-path="learners.html"><a href="learners.html#predefined-learners"><i class="fa fa-check"></i><b>3.3.1</b> Predefined Learners</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="train-predict.html"><a href="train-predict.html"><i class="fa fa-check"></i><b>3.4</b> Train &amp; Predict</a><ul>
+<li class="chapter" data-level="3.4.1" data-path="train-predict.html"><a href="train-predict.html#basic-concept"><i class="fa fa-check"></i><b>3.4.1</b> Basic concept</a><ul>
+<li class="chapter" data-level="3.4.1.1" data-path="train-predict.html"><a href="train-predict.html#creating-task-and-learner-objects"><i class="fa fa-check"></i><b>3.4.1.1</b> Creating Task and Learner Objects</a></li>
+<li class="chapter" data-level="3.4.1.2" data-path="train-predict.html"><a href="train-predict.html#setting-up-the-traintest-splits-of-the-data-split-data"><i class="fa fa-check"></i><b>3.4.1.2</b> Setting up the train/test splits of the data (#split-data)</a></li>
+<li class="chapter" data-level="3.4.1.3" data-path="train-predict.html"><a href="train-predict.html#training-the-learner"><i class="fa fa-check"></i><b>3.4.1.3</b> Training the learner</a></li>
+<li class="chapter" data-level="3.4.1.4" data-path="train-predict.html"><a href="train-predict.html#predicting"><i class="fa fa-check"></i><b>3.4.1.4</b> Predicting</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3.5" data-path="resampling.html"><a href="resampling.html"><i class="fa fa-check"></i><b>3.5</b> Resampling</a><ul>
+<li class="chapter" data-level="3.5.1" data-path="resampling.html"><a href="resampling.html#resamp-settings"><i class="fa fa-check"></i><b>3.5.1</b> Settings</a></li>
+<li class="chapter" data-level="3.5.2" data-path="resampling.html"><a href="resampling.html#resamp-inst"><i class="fa fa-check"></i><b>3.5.2</b> Instantiation</a></li>
+<li class="chapter" data-level="3.5.3" data-path="resampling.html"><a href="resampling.html#resamp-exec"><i class="fa fa-check"></i><b>3.5.3</b> Execution</a></li>
+<li class="chapter" data-level="3.5.4" data-path="resampling.html"><a href="resampling.html#custom-resampling"><i class="fa fa-check"></i><b>3.5.4</b> Custom resampling</a></li>
+</ul></li>
+<li class="chapter" data-level="3.6" data-path="benchmarking.html"><a href="benchmarking.html"><i class="fa fa-check"></i><b>3.6</b> Benchmarking</a><ul>
+<li class="chapter" data-level="3.6.1" data-path="benchmarking.html"><a href="benchmarking.html#bm-design"><i class="fa fa-check"></i><b>3.6.1</b> Design Creation</a></li>
+<li class="chapter" data-level="3.6.2" data-path="benchmarking.html"><a href="benchmarking.html#bm-exec"><i class="fa fa-check"></i><b>3.6.2</b> Execution and Aggregation of Results</a></li>
+<li class="chapter" data-level="3.6.3" data-path="benchmarking.html"><a href="benchmarking.html#converting-specific-benchmark-objects-to-resample-objects"><i class="fa fa-check"></i><b>3.6.3</b> Converting specific benchmark objects to resample objects</a></li>
+</ul></li>
+<li class="chapter" data-level="3.7" data-path="binary.html"><a href="binary.html"><i class="fa fa-check"></i><b>3.7</b> Binary classification</a><ul>
+<li class="chapter" data-level="3.7.1" data-path="binary.html"><a href="binary.html#roc-curve-and-thresholds"><i class="fa fa-check"></i><b>3.7.1</b> ROC Curve and Thresholds</a></li>
+<li class="chapter" data-level="3.7.2" data-path="binary.html"><a href="binary.html#threshold-tuning"><i class="fa fa-check"></i><b>3.7.2</b> Threshold Tuning</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="model-optim.html"><a href="model-optim.html"><i class="fa fa-check"></i><b>4</b> Model Optimization</a><ul>
+<li class="chapter" data-level="4.1" data-path="tuning.html"><a href="tuning.html"><i class="fa fa-check"></i><b>4.1</b> Hyperparameter Tuning</a><ul>
+<li class="chapter" data-level="4.1.1" data-path="tuning.html"><a href="tuning.html#the-tuninginstance-class"><i class="fa fa-check"></i><b>4.1.1</b> The <code>TuningInstance</code> Class</a></li>
+<li class="chapter" data-level="4.1.2" data-path="tuning.html"><a href="tuning.html#the-tuner-class"><i class="fa fa-check"></i><b>4.1.2</b> The <code>Tuner</code> Class</a></li>
+<li class="chapter" data-level="4.1.3" data-path="tuning.html"><a href="tuning.html#triggering-the-tuning"><i class="fa fa-check"></i><b>4.1.3</b> Triggering the Tuning</a></li>
+<li class="chapter" data-level="4.1.4" data-path="tuning.html"><a href="tuning.html#autotuner"><i class="fa fa-check"></i><b>4.1.4</b> Automating the Tuning</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="fs.html"><a href="fs.html"><i class="fa fa-check"></i><b>4.2</b> Feature Selection / Filtering</a><ul>
+<li class="chapter" data-level="4.2.1" data-path="fs.html"><a href="fs.html#fs-filter"><i class="fa fa-check"></i><b>4.2.1</b> Filters</a></li>
+<li class="chapter" data-level="4.2.2" data-path="fs.html"><a href="fs.html#fs-calc"><i class="fa fa-check"></i><b>4.2.2</b> Calculating filter values</a></li>
+<li class="chapter" data-level="4.2.3" data-path="fs.html"><a href="fs.html#fs-var-imp-filters"><i class="fa fa-check"></i><b>4.2.3</b> Variable Importance Filters</a></li>
+<li class="chapter" data-level="4.2.4" data-path="fs.html"><a href="fs.html#fs-ensemble"><i class="fa fa-check"></i><b>4.2.4</b> Ensemble Methods</a></li>
+<li class="chapter" data-level="4.2.5" data-path="fs.html"><a href="fs.html#fs-wrapper"><i class="fa fa-check"></i><b>4.2.5</b> Wrapper Methods</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="nested-resampling.html"><a href="nested-resampling.html"><i class="fa fa-check"></i><b>4.3</b> Nested Resampling</a><ul>
+<li class="chapter" data-level="4.3.1" data-path="nested-resampling.html"><a href="nested-resampling.html#introduction"><i class="fa fa-check"></i><b>4.3.1</b> Introduction</a></li>
+<li class="chapter" data-level="4.3.2" data-path="nested-resampling.html"><a href="nested-resampling.html#execution"><i class="fa fa-check"></i><b>4.3.2</b> Execution</a></li>
+<li class="chapter" data-level="4.3.3" data-path="nested-resampling.html"><a href="nested-resampling.html#rr-eval"><i class="fa fa-check"></i><b>4.3.3</b> Evaluation</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="pipelines.html"><a href="pipelines.html"><i class="fa fa-check"></i><b>5</b> Pipelines</a></li>
+<li class="chapter" data-level="6" data-path="technical.html"><a href="technical.html"><i class="fa fa-check"></i><b>6</b> Technical</a><ul>
+<li class="chapter" data-level="6.1" data-path="parallelization.html"><a href="parallelization.html"><i class="fa fa-check"></i><b>6.1</b> Parallelization</a></li>
+<li class="chapter" data-level="6.2" data-path="error-handling.html"><a href="error-handling.html"><i class="fa fa-check"></i><b>6.2</b> Error Handling</a><ul>
+<li class="chapter" data-level="6.2.1" data-path="error-handling.html"><a href="error-handling.html#encapsulation"><i class="fa fa-check"></i><b>6.2.1</b> Encapsulation</a></li>
+<li class="chapter" data-level="6.2.2" data-path="error-handling.html"><a href="error-handling.html#fallback-learners"><i class="fa fa-check"></i><b>6.2.2</b> Fallback learners</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="backends.html"><a href="backends.html"><i class="fa fa-check"></i><b>6.3</b> Database Backends</a><ul>
+<li class="chapter" data-level="6.3.1" data-path="backends.html"><a href="backends.html#example-data"><i class="fa fa-check"></i><b>6.3.1</b> Example Data</a></li>
+<li class="chapter" data-level="6.3.2" data-path="backends.html"><a href="backends.html#preprocessing-with-dplyr"><i class="fa fa-check"></i><b>6.3.2</b> Preprocessing with <code>dplyr</code></a></li>
+<li class="chapter" data-level="6.3.3" data-path="backends.html"><a href="backends.html#databackenddplyr"><i class="fa fa-check"></i><b>6.3.3</b> DataBackendDplyr</a></li>
+<li class="chapter" data-level="6.3.4" data-path="backends.html"><a href="backends.html#model-fitting"><i class="fa fa-check"></i><b>6.3.4</b> Model fitting</a></li>
+<li class="chapter" data-level="6.3.5" data-path="backends.html"><a href="backends.html#cleanup"><i class="fa fa-check"></i><b>6.3.5</b> Cleanup</a></li>
+</ul></li>
+<li class="chapter" data-level="6.4" data-path="paradox.html"><a href="paradox.html"><i class="fa fa-check"></i><b>6.4</b> Parameters (using <code>paradox</code>)</a><ul>
+<li class="chapter" data-level="6.4.1" data-path="paradox.html"><a href="paradox.html#reference-based-objects"><i class="fa fa-check"></i><b>6.4.1</b> Reference Based Objects</a></li>
+<li class="chapter" data-level="6.4.2" data-path="paradox.html"><a href="paradox.html#defining-a-parameter-space"><i class="fa fa-check"></i><b>6.4.2</b> Defining a Parameter Space</a><ul>
+<li class="chapter" data-level="6.4.2.1" data-path="paradox.html"><a href="paradox.html#single-parameters"><i class="fa fa-check"></i><b>6.4.2.1</b> Single Parameters</a></li>
+<li class="chapter" data-level="6.4.2.2" data-path="paradox.html"><a href="paradox.html#parameter-sets"><i class="fa fa-check"></i><b>6.4.2.2</b> Parameter Sets</a></li>
+<li class="chapter" data-level="6.4.2.3" data-path="paradox.html"><a href="paradox.html#vector-parameters"><i class="fa fa-check"></i><b>6.4.2.3</b> Vector Parameters</a></li>
+</ul></li>
+<li class="chapter" data-level="6.4.3" data-path="paradox.html"><a href="paradox.html#parameter-sampling"><i class="fa fa-check"></i><b>6.4.3</b> Parameter Sampling</a><ul>
+<li class="chapter" data-level="6.4.3.1" data-path="paradox.html"><a href="paradox.html#parameter-designs"><i class="fa fa-check"></i><b>6.4.3.1</b> Parameter Designs</a></li>
+<li class="chapter" data-level="6.4.3.2" data-path="paradox.html"><a href="paradox.html#grid-design"><i class="fa fa-check"></i><b>6.4.3.2</b> Grid Design</a></li>
+<li class="chapter" data-level="6.4.3.3" data-path="paradox.html"><a href="paradox.html#random-sampling"><i class="fa fa-check"></i><b>6.4.3.3</b> Random Sampling</a></li>
+<li class="chapter" data-level="6.4.3.4" data-path="paradox.html"><a href="paradox.html#generalized-sampling-the-sampler-class"><i class="fa fa-check"></i><b>6.4.3.4</b> Generalized Sampling: The <code>Sampler</code> Class</a></li>
+</ul></li>
+<li class="chapter" data-level="6.4.4" data-path="paradox.html"><a href="paradox.html#parameter-transformation"><i class="fa fa-check"></i><b>6.4.4</b> Parameter Transformation</a><ul>
+<li class="chapter" data-level="6.4.4.1" data-path="paradox.html"><a href="paradox.html#transformation-between-types"><i class="fa fa-check"></i><b>6.4.4.1</b> Transformation between Types</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6.5" data-path="logging-and-verbosity.html"><a href="logging-and-verbosity.html"><i class="fa fa-check"></i><b>6.5</b> Logging and Verbosity</a><ul>
+<li class="chapter" data-level="6.5.1" data-path="logging-and-verbosity.html"><a href="logging-and-verbosity.html#available-logging-levels"><i class="fa fa-check"></i><b>6.5.1</b> Available logging levels</a></li>
+<li class="chapter" data-level="6.5.2" data-path="logging-and-verbosity.html"><a href="logging-and-verbosity.html#global-setting"><i class="fa fa-check"></i><b>6.5.2</b> Global Setting</a></li>
+<li class="chapter" data-level="6.5.3" data-path="logging-and-verbosity.html"><a href="logging-and-verbosity.html#changing-mlr3-logging-levels"><i class="fa fa-check"></i><b>6.5.3</b> Changing mlr3 logging levels</a></li>
+</ul></li>
+<li class="chapter" data-level="6.6" data-path="mlr-mlr3-transition-guide.html"><a href="mlr-mlr3-transition-guide.html"><i class="fa fa-check"></i><b>6.6</b> mlr -&gt; mlr3 Transition Guide</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="extending.html"><a href="extending.html"><i class="fa fa-check"></i><b>7</b> Extending</a><ul>
+<li class="chapter" data-level="7.1" data-path="extending-mlr3.html"><a href="extending-mlr3.html"><i class="fa fa-check"></i><b>7.1</b> Extending mlr3</a><ul>
+<li class="chapter" data-level="7.1.1" data-path="extending-mlr3.html"><a href="extending-mlr3.html#ext-learner"><i class="fa fa-check"></i><b>7.1.1</b> Learners</a><ul>
+<li class="chapter" data-level="7.1.1.1" data-path="extending-mlr3.html"><a href="extending-mlr3.html#learner-meta-information"><i class="fa fa-check"></i><b>7.1.1.1</b> Meta-information</a></li>
+<li class="chapter" data-level="7.1.1.2" data-path="extending-mlr3.html"><a href="extending-mlr3.html#learner-train"><i class="fa fa-check"></i><b>7.1.1.2</b> Train function</a></li>
+<li class="chapter" data-level="7.1.1.3" data-path="extending-mlr3.html"><a href="extending-mlr3.html#learner-predict"><i class="fa fa-check"></i><b>7.1.1.3</b> Predict function</a></li>
+<li class="chapter" data-level="7.1.1.4" data-path="extending-mlr3.html"><a href="extending-mlr3.html#final-learner"><i class="fa fa-check"></i><b>7.1.1.4</b> Final learner</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="extending-mlr3pipelines.html"><a href="extending-mlr3pipelines.html"><i class="fa fa-check"></i><b>7.2</b> Extending mlr3pipelines</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="special-tasks.html"><a href="special-tasks.html"><i class="fa fa-check"></i><b>8</b> Special Tasks</a><ul>
+<li class="chapter" data-level="8.1" data-path="survival.html"><a href="survival.html"><i class="fa fa-check"></i><b>8.1</b> Survival Analysis</a></li>
+<li class="chapter" data-level="8.2" data-path="spatial.html"><a href="spatial.html"><i class="fa fa-check"></i><b>8.2</b> Spatial Analysis</a></li>
+<li class="chapter" data-level="8.3" data-path="ordinal.html"><a href="ordinal.html"><i class="fa fa-check"></i><b>8.3</b> Ordinal Analysis</a></li>
+<li class="chapter" data-level="8.4" data-path="functional.html"><a href="functional.html"><i class="fa fa-check"></i><b>8.4</b> Functional Analysis</a><ul>
+<li class="chapter" data-level="8.4.1" data-path="functional.html"><a href="functional.html#how-to-model-functional-data"><i class="fa fa-check"></i><b>8.4.1</b> How to model functional data?</a></li>
+</ul></li>
+<li class="chapter" data-level="8.5" data-path="multilabel.html"><a href="multilabel.html"><i class="fa fa-check"></i><b>8.5</b> Multilabel Classification</a></li>
+<li class="chapter" data-level="8.6" data-path="cost-sens.html"><a href="cost-sens.html"><i class="fa fa-check"></i><b>8.6</b> Cost-Sensitive Classification</a><ul>
+<li class="chapter" data-level="8.6.1" data-path="cost-sens.html"><a href="cost-sens.html#a-first-model"><i class="fa fa-check"></i><b>8.6.1</b> A First Model</a></li>
+<li class="chapter" data-level="8.6.2" data-path="cost-sens.html"><a href="cost-sens.html#cost-sensitive-measure"><i class="fa fa-check"></i><b>8.6.2</b> Cost-sensitive Measure</a></li>
+<li class="chapter" data-level="8.6.3" data-path="cost-sens.html"><a href="cost-sens.html#thresholding"><i class="fa fa-check"></i><b>8.6.3</b> Thresholding</a></li>
+<li class="chapter" data-level="8.6.4" data-path="cost-sens.html"><a href="cost-sens.html#threshold-tuning-1"><i class="fa fa-check"></i><b>8.6.4</b> Threshold Tuning</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="model-interpr.html"><a href="model-interpr.html"><i class="fa fa-check"></i><b>9</b> Model Interpretation with mlr3</a><ul>
+<li class="chapter" data-level="9.1" data-path="iml.html"><a href="iml.html"><i class="fa fa-check"></i><b>9.1</b> IML</a></li>
+<li class="chapter" data-level="9.2" data-path="dalex.html"><a href="dalex.html"><i class="fa fa-check"></i><b>9.2</b> Dalex</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="use-cases.html"><a href="use-cases.html"><i class="fa fa-check"></i><b>10</b> Use Cases</a><ul>
+<li class="chapter" data-level="10.1" data-path="use-case-regr-houses.html"><a href="use-case-regr-houses.html"><i class="fa fa-check"></i><b>10.1</b> House Price Prediction in King County</a><ul>
+<li class="chapter" data-level="10.1.1" data-path="use-case-regr-houses.html"><a href="use-case-regr-houses.html#exploratory-data-analysis"><i class="fa fa-check"></i><b>10.1.1</b> Exploratory Data Analysis</a><ul>
+<li class="chapter" data-level="10.1.1.1" data-path="use-case-regr-houses.html"><a href="use-case-regr-houses.html#distribution-of-the-price"><i class="fa fa-check"></i><b>10.1.1.1</b> Distribution of the price:</a></li>
+<li class="chapter" data-level="10.1.1.2" data-path="use-case-regr-houses.html"><a href="use-case-regr-houses.html#association-between-variables"><i class="fa fa-check"></i><b>10.1.1.2</b> Association between variables</a></li>
+</ul></li>
+<li class="chapter" data-level="10.1.2" data-path="use-case-regr-houses.html"><a href="use-case-regr-houses.html#splitting-into-train-and-test-data"><i class="fa fa-check"></i><b>10.1.2</b> Splitting into train and test data</a></li>
+<li class="chapter" data-level="10.1.3" data-path="use-case-regr-houses.html"><a href="use-case-regr-houses.html#a-first-model-decision-tree"><i class="fa fa-check"></i><b>10.1.3</b> A first model: Decision Tree</a></li>
+<li class="chapter" data-level="10.1.4" data-path="use-case-regr-houses.html"><a href="use-case-regr-houses.html#a-first-baseline-decision-tree"><i class="fa fa-check"></i><b>10.1.4</b> A first baseline: Decision Tree</a></li>
+<li class="chapter" data-level="10.1.5" data-path="use-case-regr-houses.html"><a href="use-case-regr-houses.html#many-trees-random-forest"><i class="fa fa-check"></i><b>10.1.5</b> Many Trees: Random Forest</a></li>
+<li class="chapter" data-level="10.1.6" data-path="use-case-regr-houses.html"><a href="use-case-regr-houses.html#a-better-baseline-autotuner"><i class="fa fa-check"></i><b>10.1.6</b> A better baseline: <code>AutoTuner</code></a></li>
+<li class="chapter" data-level="10.1.7" data-path="use-case-regr-houses.html"><a href="use-case-regr-houses.html#engineering-features-mutating-zip-codes"><i class="fa fa-check"></i><b>10.1.7</b> Engineering Features: Mutating ZIP-Codes</a></li>
+<li class="chapter" data-level="10.1.8" data-path="use-case-regr-houses.html"><a href="use-case-regr-houses.html#obtaining-a-sparser-model"><i class="fa fa-check"></i><b>10.1.8</b> Obtaining a sparser model</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="appendix.html"><a href="appendix.html"><i class="fa fa-check"></i><b>11</b> Appendix</a><ul>
+<li class="chapter" data-level="11.1" data-path="list-learners.html"><a href="list-learners.html"><i class="fa fa-check"></i><b>11.1</b> Integrated Learners</a></li>
+<li class="chapter" data-level="11.2" data-path="list-filters.html"><a href="list-filters.html"><i class="fa fa-check"></i><b>11.2</b> Integrated Filter Methods</a><ul>
+<li class="chapter" data-level="11.2.1" data-path="list-filters.html"><a href="list-filters.html#fs-filter-list"><i class="fa fa-check"></i><b>11.2.1</b> Standalone filter methods</a></li>
+<li class="chapter" data-level="11.2.2" data-path="list-filters.html"><a href="list-filters.html#fs-filter-embedded-list"><i class="fa fa-check"></i><b>11.2.2</b> Algorithms With Embedded Filter Methods</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="./">Made with <i class="fas fa-heart"></i> for open-source </a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">mlr3 manual <img src='https://raw.githubusercontent.com/mlr-org/mlr/master/man/figures/logo_navbar.png' width='50'></a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="use-case-regr-houses" class="section level2">
+<h2><span class="header-section-number">10.1</span> House Price Prediction in King County</h2>
+<p>We use the <code>house_sales_prediction</code> dataset contained in this book in order to provide a use-case for the application of <code>mlr3</code> on real-world data.</p>
+<div class="sourceCode" id="cb175"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb175-1" data-line-number="1"><span class="kw">library</span>(mlr3book)</a>
+<a class="sourceLine" id="cb175-2" data-line-number="2"><span class="kw">data</span>(<span class="st">&quot;house_sales_prediction&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;mlr3book&quot;</span>)</a></code></pre></div>
+<div id="exploratory-data-analysis" class="section level3">
+<h3><span class="header-section-number">10.1.1</span> Exploratory Data Analysis</h3>
+<p>In order to get a quick impression of our data, we perform some initial <em>Exploratory Data Analysis</em>.
+This helps us to get a first impression of our data and might help us arrive at additional features that can help with the prediction of the house prices.</p>
+<p>We can get a quick overview using R’s summary function:</p>
+<div class="sourceCode" id="cb176"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb176-1" data-line-number="1"><span class="kw">summary</span>(house_sales_prediction)</a>
+<a class="sourceLine" id="cb176-2" data-line-number="2">##        id                 date               price            bedrooms    </a>
+<a class="sourceLine" id="cb176-3" data-line-number="3">##  Min.   :   1000102   Length:21613       Min.   :  75000   Min.   : 0.00  </a>
+<a class="sourceLine" id="cb176-4" data-line-number="4">##  1st Qu.:2123049194   Class :character   1st Qu.: 321950   1st Qu.: 3.00  </a>
+<a class="sourceLine" id="cb176-5" data-line-number="5">##  Median :3904930410   Mode  :character   Median : 450000   Median : 3.00  </a>
+<a class="sourceLine" id="cb176-6" data-line-number="6">##  Mean   :4580301520                      Mean   : 540088   Mean   : 3.37  </a>
+<a class="sourceLine" id="cb176-7" data-line-number="7">##  3rd Qu.:7308900445                      3rd Qu.: 645000   3rd Qu.: 4.00  </a>
+<a class="sourceLine" id="cb176-8" data-line-number="8">##  Max.   :9900000190                      Max.   :7700000   Max.   :33.00  </a>
+<a class="sourceLine" id="cb176-9" data-line-number="9">##    bathrooms     sqft_living       sqft_lot           floors    </a>
+<a class="sourceLine" id="cb176-10" data-line-number="10">##  Min.   :0.00   Min.   :  290   Min.   :    520   Min.   :1.00  </a>
+<a class="sourceLine" id="cb176-11" data-line-number="11">##  1st Qu.:1.75   1st Qu.: 1427   1st Qu.:   5040   1st Qu.:1.00  </a>
+<a class="sourceLine" id="cb176-12" data-line-number="12">##  Median :2.25   Median : 1910   Median :   7618   Median :1.50  </a>
+<a class="sourceLine" id="cb176-13" data-line-number="13">##  Mean   :2.12   Mean   : 2080   Mean   :  15107   Mean   :1.49  </a>
+<a class="sourceLine" id="cb176-14" data-line-number="14">##  3rd Qu.:2.50   3rd Qu.: 2550   3rd Qu.:  10688   3rd Qu.:2.00  </a>
+<a class="sourceLine" id="cb176-15" data-line-number="15">##  Max.   :8.00   Max.   :13540   Max.   :1651359   Max.   :3.50  </a>
+<a class="sourceLine" id="cb176-16" data-line-number="16">##    waterfront          view         condition        grade         sqft_above  </a>
+<a class="sourceLine" id="cb176-17" data-line-number="17">##  Min.   :0.0000   Min.   :0.000   Min.   :1.00   Min.   : 1.00   Min.   : 290  </a>
+<a class="sourceLine" id="cb176-18" data-line-number="18">##  1st Qu.:0.0000   1st Qu.:0.000   1st Qu.:3.00   1st Qu.: 7.00   1st Qu.:1190  </a>
+<a class="sourceLine" id="cb176-19" data-line-number="19">##  Median :0.0000   Median :0.000   Median :3.00   Median : 7.00   Median :1560  </a>
+<a class="sourceLine" id="cb176-20" data-line-number="20">##  Mean   :0.0075   Mean   :0.234   Mean   :3.41   Mean   : 7.66   Mean   :1788  </a>
+<a class="sourceLine" id="cb176-21" data-line-number="21">##  3rd Qu.:0.0000   3rd Qu.:0.000   3rd Qu.:4.00   3rd Qu.: 8.00   3rd Qu.:2210  </a>
+<a class="sourceLine" id="cb176-22" data-line-number="22">##  Max.   :1.0000   Max.   :4.000   Max.   :5.00   Max.   :13.00   Max.   :9410  </a>
+<a class="sourceLine" id="cb176-23" data-line-number="23">##  sqft_basement     yr_built     yr_renovated       zipcode           lat      </a>
+<a class="sourceLine" id="cb176-24" data-line-number="24">##  Min.   :   0   Min.   :1900   Min.   :   0.0   Min.   :98001   Min.   :47.2  </a>
+<a class="sourceLine" id="cb176-25" data-line-number="25">##  1st Qu.:   0   1st Qu.:1951   1st Qu.:   0.0   1st Qu.:98033   1st Qu.:47.5  </a>
+<a class="sourceLine" id="cb176-26" data-line-number="26">##  Median :   0   Median :1975   Median :   0.0   Median :98065   Median :47.6  </a>
+<a class="sourceLine" id="cb176-27" data-line-number="27">##  Mean   : 292   Mean   :1971   Mean   :  84.4   Mean   :98078   Mean   :47.6  </a>
+<a class="sourceLine" id="cb176-28" data-line-number="28">##  3rd Qu.: 560   3rd Qu.:1997   3rd Qu.:   0.0   3rd Qu.:98118   3rd Qu.:47.7  </a>
+<a class="sourceLine" id="cb176-29" data-line-number="29">##  Max.   :4820   Max.   :2015   Max.   :2015.0   Max.   :98199   Max.   :47.8  </a>
+<a class="sourceLine" id="cb176-30" data-line-number="30">##       long      sqft_living15    sqft_lot15    </a>
+<a class="sourceLine" id="cb176-31" data-line-number="31">##  Min.   :-123   Min.   : 399   Min.   :   651  </a>
+<a class="sourceLine" id="cb176-32" data-line-number="32">##  1st Qu.:-122   1st Qu.:1490   1st Qu.:  5100  </a>
+<a class="sourceLine" id="cb176-33" data-line-number="33">##  Median :-122   Median :1840   Median :  7620  </a>
+<a class="sourceLine" id="cb176-34" data-line-number="34">##  Mean   :-122   Mean   :1987   Mean   : 12768  </a>
+<a class="sourceLine" id="cb176-35" data-line-number="35">##  3rd Qu.:-122   3rd Qu.:2360   3rd Qu.: 10083  </a>
+<a class="sourceLine" id="cb176-36" data-line-number="36">##  Max.   :-121   Max.   :6210   Max.   :871200</a>
+<a class="sourceLine" id="cb176-37" data-line-number="37"><span class="kw">dim</span>(house_sales_prediction)</a>
+<a class="sourceLine" id="cb176-38" data-line-number="38">## [1] 21613    21</a></code></pre></div>
+<p>Our dataset has 21613 observations and 21 columns.
+The variable we want to predict is <code>price</code>.
+In addition to the price column, we have several other columns:</p>
+<ul>
+<li><p><code>id:</code> A unique identifier for every house.</p></li>
+<li><p><code>date</code>: A date column, indicating when the house was sold.
+This column is currently not encoded as a <code>date</code> and requires some preprocessing.</p></li>
+<li><p><code>zipcode</code>: A column indicating the ZIP code. This is a categorical variable with many factor levels.</p></li>
+<li><p><code>long, lat</code> The longitude and latitude of the house</p></li>
+<li><p><code>...</code> several other numeric columns providing information about the house, such as number of rooms, square feet etc.</p></li>
+</ul>
+<p>Before we continue with the analysis, we preprocess some features so that they are stored in the correct format.</p>
+<p>First we convert the <code>date</code> column to <code>numeric</code> to be able to treat it as a numeric feature:</p>
+<div class="sourceCode" id="cb177"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb177-1" data-line-number="1"><span class="kw">library</span>(lubridate)</a>
+<a class="sourceLine" id="cb177-2" data-line-number="2">house_sales_prediction<span class="op">$</span>date =<span class="st"> </span><span class="kw">ymd</span>(<span class="kw">substr</span>(house_sales_prediction<span class="op">$</span>date, <span class="dv">1</span>, <span class="dv">8</span>))</a>
+<a class="sourceLine" id="cb177-3" data-line-number="3">house_sales_prediction<span class="op">$</span>date =<span class="st"> </span><span class="kw">as.numeric</span>(<span class="kw">as.Date</span>(house_sales_prediction<span class="op">$</span>date, <span class="dt">origin =</span> <span class="st">&quot;1900-01-01&quot;</span>))</a>
+<a class="sourceLine" id="cb177-4" data-line-number="4">house_sales_prediction<span class="op">$</span>date =<span class="st"> </span>house_sales_prediction<span class="op">$</span>date</a></code></pre></div>
+<p>Afterwards, we convert the zipcode to a factor:</p>
+<div class="sourceCode" id="cb178"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb178-1" data-line-number="1">house_sales_prediction<span class="op">$</span>zipcode =<span class="st"> </span><span class="kw">as.factor</span>(house_sales_prediction<span class="op">$</span>zipcode)</a></code></pre></div>
+<p>And add a new column <strong>renovated</strong> indicating whether a house was renovated at some point.</p>
+<div class="sourceCode" id="cb179"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb179-1" data-line-number="1">house_sales_prediction<span class="op">$</span>renovated =<span class="st"> </span><span class="kw">as.numeric</span>(house_sales_prediction<span class="op">$</span>yr_renovated <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>)</a>
+<a class="sourceLine" id="cb179-2" data-line-number="2"><span class="co"># And drop the id column:</span></a>
+<a class="sourceLine" id="cb179-3" data-line-number="3">house_sales_prediction<span class="op">$</span>id =<span class="st"> </span><span class="ot">NULL</span></a></code></pre></div>
+<p>Additionally we convert the price from Dollar to units of 1000 Dollar to improve readability.</p>
+<div class="sourceCode" id="cb180"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb180-1" data-line-number="1">house_sales_prediction<span class="op">$</span>price =<span class="st"> </span>house_sales_prediction<span class="op">$</span>price <span class="op">/</span><span class="st"> </span><span class="dv">1000</span></a></code></pre></div>
+<p>We can now plot the density of the <strong>price</strong> to get a first impression on its distribution.</p>
+<div class="sourceCode" id="cb181"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb181-1" data-line-number="1"><span class="kw">library</span>(ggplot2)</a>
+<a class="sourceLine" id="cb181-2" data-line-number="2"><span class="kw">ggplot</span>(house_sales_prediction, <span class="kw">aes</span>(<span class="dt">x =</span> price)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_density</span>()</a></code></pre></div>
+<p><img src="mlr3book_files/figure-html/08-house-prices-007-1.svg" width="672" /></p>
+<p>We can see that the prices for most houses lie between 75.000 and 1.5 million dollars.
+There are few extreme values of up to 7.7 million dollars.</p>
+<p>Feature engineering often allows us to incorporate additional knowledge about the data and underlying processes.
+This can often greatly enhance predictive performance.
+A simple example: A house which has <code>yr_renovated == 0</code> means that is has not been renovated yet.
+Additionally we want to drop features which should not have any influence (<code>id column</code>).</p>
+<p>After those initial manipulations, we load all required packages and create a Task containing our data.</p>
+<div class="sourceCode" id="cb182"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb182-1" data-line-number="1"><span class="kw">library</span>(mlr3)</a>
+<a class="sourceLine" id="cb182-2" data-line-number="2"><span class="kw">library</span>(mlr3viz)</a>
+<a class="sourceLine" id="cb182-3" data-line-number="3">tsk =<span class="st"> </span>TaskRegr<span class="op">$</span><span class="kw">new</span>(<span class="st">&quot;sales&quot;</span>, house_sales_prediction, <span class="dt">target =</span> <span class="st">&quot;price&quot;</span>)</a></code></pre></div>
+<p>We can inspect associations between variables using <code>mlr3viz</code>’s <code>autoplot</code> function in order to get some good first impressions for our data.
+Note, that this does in no way prevent us from using other powerful plot functions of our choice on the original data.</p>
+<div id="distribution-of-the-price" class="section level4">
+<h4><span class="header-section-number">10.1.1.1</span> Distribution of the price:</h4>
+<p>The outcome we want to predict is the <strong>price</strong> variable.
+The <code>autoplot</code> function provides a good first glimpse on our data.
+As the resulting object is a <code>ggplot2</code> object, we can use <code>faceting</code> and other functions from <strong>ggplot2</strong> in order to enhance plots.</p>
+<div class="sourceCode" id="cb183"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb183-1" data-line-number="1"><span class="kw">library</span>(ggplot2)</a>
+<a class="sourceLine" id="cb183-2" data-line-number="2"><span class="kw">autoplot</span>(tsk) <span class="op">+</span><span class="st"> </span><span class="kw">facet_wrap</span>(<span class="op">~</span>renovated)</a></code></pre></div>
+<p><img src="mlr3book_files/figure-html/08-house-prices-009-1.svg" width="672" /></p>
+<p>We can observe that renovated flats seem to achieve higher sales values, and this might thus be a relevant feature.</p>
+<p>Additionally, we can for example look at the condition of the house.
+Again, we clearly can see that the price rises with increasing condition.</p>
+<div class="sourceCode" id="cb184"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb184-1" data-line-number="1"><span class="kw">autoplot</span>(tsk) <span class="op">+</span><span class="st"> </span><span class="kw">facet_wrap</span>(<span class="op">~</span>condition)</a></code></pre></div>
+<p><img src="mlr3book_files/figure-html/08-house-prices-010-1.svg" width="672" /></p>
+</div>
+<div id="association-between-variables" class="section level4">
+<h4><span class="header-section-number">10.1.1.2</span> Association between variables</h4>
+<p>In addition to the association with the target variable, the association between the features can also lead to interesting insights.
+We investigate using variables associated with the quality and size of the house.
+Note that we use <code>$clone()</code> and <code>$select()</code> to clone the task and select only a subset of the features for the <code>autoplot</code> function, as <code>autoplot</code> per default uses all features.
+The task is cloned before we select features in order to keep the original task intact.</p>
+<div class="sourceCode" id="cb185"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb185-1" data-line-number="1"><span class="co"># Variables associated with quality</span></a>
+<a class="sourceLine" id="cb185-2" data-line-number="2"><span class="kw">autoplot</span>(tsk<span class="op">$</span><span class="kw">clone</span>()<span class="op">$</span><span class="kw">select</span>(tsk<span class="op">$</span>feature_names[<span class="kw">c</span>(<span class="dv">3</span>, <span class="dv">17</span>)]),</a>
+<a class="sourceLine" id="cb185-3" data-line-number="3">  <span class="dt">type =</span> <span class="st">&quot;pairs&quot;</span>)</a></code></pre></div>
+<p><img src="mlr3book_files/figure-html/08-house-prices-011-1.svg" width="672" /></p>
+<div class="sourceCode" id="cb186"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb186-1" data-line-number="1"><span class="kw">autoplot</span>(tsk<span class="op">$</span><span class="kw">clone</span>()<span class="op">$</span><span class="kw">select</span>(tsk<span class="op">$</span>feature_names[<span class="kw">c</span>(<span class="dv">9</span><span class="op">:</span><span class="dv">12</span>)]),</a>
+<a class="sourceLine" id="cb186-2" data-line-number="2">  <span class="dt">type =</span> <span class="st">&quot;pairs&quot;</span>)</a></code></pre></div>
+<p><img src="mlr3book_files/figure-html/08-house-prices-012-1.svg" width="672" /></p>
+</div>
+</div>
+<div id="splitting-into-train-and-test-data" class="section level3">
+<h3><span class="header-section-number">10.1.2</span> Splitting into train and test data</h3>
+<p>In <code>mlr3</code>, we do not create <code>train</code> and <code>test</code> data sets, but instead keep only a vector of train and test indices.</p>
+<div class="sourceCode" id="cb187"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb187-1" data-line-number="1"><span class="kw">set.seed</span>(<span class="dv">4411</span>)</a>
+<a class="sourceLine" id="cb187-2" data-line-number="2">train.idx =<span class="st"> </span><span class="kw">sample</span>(<span class="kw">seq_len</span>(tsk<span class="op">$</span>nrow), <span class="fl">0.7</span> <span class="op">*</span><span class="st"> </span>tsk<span class="op">$</span>nrow)</a>
+<a class="sourceLine" id="cb187-3" data-line-number="3">test.idx =<span class="st"> </span><span class="kw">setdiff</span>(<span class="kw">seq_len</span>(tsk<span class="op">$</span>nrow), train.idx)</a></code></pre></div>
+</div>
+<div id="a-first-model-decision-tree" class="section level3">
+<h3><span class="header-section-number">10.1.3</span> A first model: Decision Tree</h3>
+<p>Decision tree’s cannot only be used as a powerful tool for predictive models but for exploratory data analysis.
+In order to fit a decision tree, we first get the <code>regr.rpart</code> learner from the <code>mlr_learners</code> dictionary by using the sugar function <a href="https://mlr3.mlr-org.com/reference/mlr_sugar.html"><code>lrn</code></a>.</p>
+<p>For now we leave out the <code>zipcode</code> variable, as we also have the <code>latitude</code> and <code>longitude</code> of each house.</p>
+<div class="sourceCode" id="cb188"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb188-1" data-line-number="1">tsk_nozip =<span class="st"> </span>tsk<span class="op">$</span><span class="kw">clone</span>()<span class="op">$</span><span class="kw">select</span>(<span class="kw">setdiff</span>(tsk<span class="op">$</span>feature_names, <span class="st">&quot;zipcode&quot;</span>))</a>
+<a class="sourceLine" id="cb188-2" data-line-number="2"><span class="co"># Get the learner</span></a>
+<a class="sourceLine" id="cb188-3" data-line-number="3">lrn =<span class="st"> </span><span class="kw">lrn</span>(<span class="st">&quot;regr.rpart&quot;</span>)</a>
+<a class="sourceLine" id="cb188-4" data-line-number="4"><span class="co"># And train on the task</span></a>
+<a class="sourceLine" id="cb188-5" data-line-number="5">lrn<span class="op">$</span><span class="kw">train</span>(tsk_nozip, <span class="dt">row_ids =</span> train.idx)</a></code></pre></div>
+<div class="sourceCode" id="cb189"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb189-1" data-line-number="1"><span class="kw">plot</span>(lrn<span class="op">$</span>model)</a>
+<a class="sourceLine" id="cb189-2" data-line-number="2"><span class="kw">text</span>(lrn<span class="op">$</span>model)</a></code></pre></div>
+<p><img src="mlr3book_files/figure-html/08-house-prices-015-1.svg" width="672" /></p>
+<p>The learned tree relies on several variables in order to distinguish between cheaper and pricier houses.
+The features we split along are <strong>grade</strong>, <strong>sqft_living</strong>, but also some features related to the area (longitude and latitude).</p>
+<p>We can visualize the price across different regions in order to get more info:</p>
+<div class="sourceCode" id="cb190"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb190-1" data-line-number="1"><span class="co"># Load the ggmap package in order to visualize on a map</span></a>
+<a class="sourceLine" id="cb190-2" data-line-number="2"><span class="kw">library</span>(ggmap)</a>
+<a class="sourceLine" id="cb190-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb190-4" data-line-number="4"><span class="co"># And create a quick plot for the price</span></a>
+<a class="sourceLine" id="cb190-5" data-line-number="5"><span class="kw">qmplot</span>(long, lat, <span class="dt">maptype =</span> <span class="st">&quot;watercolor&quot;</span>, <span class="dt">color =</span> <span class="kw">log</span>(price),</a>
+<a class="sourceLine" id="cb190-6" data-line-number="6">  <span class="dt">data =</span> house_sales_prediction[train.idx[<span class="dv">1</span><span class="op">:</span><span class="dv">3000</span>],]) <span class="op">+</span></a>
+<a class="sourceLine" id="cb190-7" data-line-number="7"><span class="st">  </span><span class="kw">scale_colour_viridis_c</span>()</a></code></pre></div>
+<p><img src="mlr3book_files/figure-html/08-house-prices-016-1.svg" width="672" /></p>
+<div class="sourceCode" id="cb191"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb191-1" data-line-number="1"></a>
+<a class="sourceLine" id="cb191-2" data-line-number="2"><span class="co"># And the zipcode</span></a>
+<a class="sourceLine" id="cb191-3" data-line-number="3"><span class="kw">qmplot</span>(long, lat, <span class="dt">maptype =</span> <span class="st">&quot;watercolor&quot;</span>, <span class="dt">color =</span> zipcode,</a>
+<a class="sourceLine" id="cb191-4" data-line-number="4">  <span class="dt">data =</span> house_sales_prediction[train.idx[<span class="dv">1</span><span class="op">:</span><span class="dv">3000</span>],]) <span class="op">+</span><span class="st"> </span><span class="kw">guides</span>(<span class="dt">color =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
+<p><img src="mlr3book_files/figure-html/08-house-prices-016-2.svg" width="672" /></p>
+<p>We can see that the price is clearly associated with the zipcode when comparing the
+two plots.
+As a result, we might want to indeed use the <strong>zipcode</strong> column in our future endeavours.</p>
+</div>
+<div id="a-first-baseline-decision-tree" class="section level3">
+<h3><span class="header-section-number">10.1.4</span> A first baseline: Decision Tree</h3>
+<p>After getting an initial idea for our data, we might want to construct a first baseline, in order to see what a simple model already can achieve.</p>
+<p>We use <code>resample</code> with <code>3-fold cross-validation</code> on our training data in order to get a reliable estimate of the algorithm’s performance on future data.
+Before we start with defining and training learners, we create a <a href="https://mlr3.mlr-org.com/reference/Resampling.html"><code>Resampling</code></a> in order to make sure that we always compare on exactly the same data.</p>
+<div class="sourceCode" id="cb192"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb192-1" data-line-number="1"><span class="kw">library</span>(mlr3learners)</a>
+<a class="sourceLine" id="cb192-2" data-line-number="2">cv3 =<span class="st"> </span><span class="kw">rsmp</span>(<span class="st">&quot;cv&quot;</span>, <span class="dt">folds =</span> <span class="dv">3</span>)</a>
+<a class="sourceLine" id="cb192-3" data-line-number="3">cv3<span class="op">$</span><span class="kw">instantiate</span>(tsk<span class="op">$</span><span class="kw">clone</span>()<span class="op">$</span><span class="kw">filter</span>(train.idx))</a></code></pre></div>
+<p>For the cross-validation we only use the <strong>training data</strong> by cloning the task and selecting only observations from the training set.</p>
+<div class="sourceCode" id="cb193"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb193-1" data-line-number="1">lrn_rpart =<span class="st"> </span><span class="kw">lrn</span>(<span class="st">&quot;regr.rpart&quot;</span>)</a>
+<a class="sourceLine" id="cb193-2" data-line-number="2">res =<span class="st"> </span><span class="kw">resample</span>(<span class="dt">task =</span> tsk<span class="op">$</span><span class="kw">clone</span>()<span class="op">$</span><span class="kw">filter</span>(train.idx), lrn_rpart, cv3)</a>
+<a class="sourceLine" id="cb193-3" data-line-number="3">res<span class="op">$</span><span class="kw">score</span>(<span class="st">&quot;regr.mse&quot;</span>)</a>
+<a class="sourceLine" id="cb193-4" data-line-number="4">## Warning: &#39;Automatic object creation from strings in `mlr3`&#39; is deprecated.</a>
+<a class="sourceLine" id="cb193-5" data-line-number="5">## Use &#39;msr&#39; instead.</a>
+<a class="sourceLine" id="cb193-6" data-line-number="6">## See help(&quot;Deprecated&quot;)</a>
+<a class="sourceLine" id="cb193-7" data-line-number="7">##          task task_id            learner learner_id     resampling</a>
+<a class="sourceLine" id="cb193-8" data-line-number="8">## 1: &lt;TaskRegr&gt;   sales &lt;LearnerRegrRpart&gt; regr.rpart &lt;ResamplingCV&gt;</a>
+<a class="sourceLine" id="cb193-9" data-line-number="9">## 2: &lt;TaskRegr&gt;   sales &lt;LearnerRegrRpart&gt; regr.rpart &lt;ResamplingCV&gt;</a>
+<a class="sourceLine" id="cb193-10" data-line-number="10">## 3: &lt;TaskRegr&gt;   sales &lt;LearnerRegrRpart&gt; regr.rpart &lt;ResamplingCV&gt;</a>
+<a class="sourceLine" id="cb193-11" data-line-number="11">##    resampling_id iteration prediction regr.mse</a>
+<a class="sourceLine" id="cb193-12" data-line-number="12">## 1:            cv         1     &lt;list&gt;    45416</a>
+<a class="sourceLine" id="cb193-13" data-line-number="13">## 2:            cv         2     &lt;list&gt;    49599</a>
+<a class="sourceLine" id="cb193-14" data-line-number="14">## 3:            cv         3     &lt;list&gt;    42518</a>
+<a class="sourceLine" id="cb193-15" data-line-number="15"><span class="kw">sprintf</span>(<span class="st">&quot;RMSE of the simple rpart: %s&quot;</span>, <span class="kw">round</span>(<span class="kw">sqrt</span>(res<span class="op">$</span><span class="kw">aggregate</span>()), <span class="dv">2</span>))</a>
+<a class="sourceLine" id="cb193-16" data-line-number="16">## [1] &quot;RMSE of the simple rpart: 214.11&quot;</a></code></pre></div>
+</div>
+<div id="many-trees-random-forest" class="section level3">
+<h3><span class="header-section-number">10.1.5</span> Many Trees: Random Forest</h3>
+<p>We might be able to improve upon the <strong>RMSE</strong> using more powerful learners.
+We first load the <code>mlr3learners</code> package, which contains the <strong>ranger</strong> learner (a package which implements the “Random Forest” algorithm).</p>
+<div class="sourceCode" id="cb194"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb194-1" data-line-number="1">lrn_ranger =<span class="st"> </span><span class="kw">lrn</span>(<span class="st">&quot;regr.ranger&quot;</span>, <span class="dt">num.trees =</span> 15L)</a>
+<a class="sourceLine" id="cb194-2" data-line-number="2">res =<span class="st"> </span><span class="kw">resample</span>(<span class="dt">task =</span> tsk<span class="op">$</span><span class="kw">clone</span>()<span class="op">$</span><span class="kw">filter</span>(train.idx), lrn_ranger, cv3)</a>
+<a class="sourceLine" id="cb194-3" data-line-number="3">res<span class="op">$</span><span class="kw">score</span>(<span class="st">&quot;regr.mse&quot;</span>)</a>
+<a class="sourceLine" id="cb194-4" data-line-number="4">## Warning: &#39;Automatic object creation from strings in `mlr3`&#39; is deprecated.</a>
+<a class="sourceLine" id="cb194-5" data-line-number="5">## Use &#39;msr&#39; instead.</a>
+<a class="sourceLine" id="cb194-6" data-line-number="6">## See help(&quot;Deprecated&quot;)</a>
+<a class="sourceLine" id="cb194-7" data-line-number="7">##          task task_id             learner  learner_id     resampling</a>
+<a class="sourceLine" id="cb194-8" data-line-number="8">## 1: &lt;TaskRegr&gt;   sales &lt;LearnerRegrRanger&gt; regr.ranger &lt;ResamplingCV&gt;</a>
+<a class="sourceLine" id="cb194-9" data-line-number="9">## 2: &lt;TaskRegr&gt;   sales &lt;LearnerRegrRanger&gt; regr.ranger &lt;ResamplingCV&gt;</a>
+<a class="sourceLine" id="cb194-10" data-line-number="10">## 3: &lt;TaskRegr&gt;   sales &lt;LearnerRegrRanger&gt; regr.ranger &lt;ResamplingCV&gt;</a>
+<a class="sourceLine" id="cb194-11" data-line-number="11">##    resampling_id iteration prediction regr.mse</a>
+<a class="sourceLine" id="cb194-12" data-line-number="12">## 1:            cv         1     &lt;list&gt;    23892</a>
+<a class="sourceLine" id="cb194-13" data-line-number="13">## 2:            cv         2     &lt;list&gt;    22455</a>
+<a class="sourceLine" id="cb194-14" data-line-number="14">## 3:            cv         3     &lt;list&gt;    18899</a>
+<a class="sourceLine" id="cb194-15" data-line-number="15"><span class="kw">sprintf</span>(<span class="st">&quot;RMSE of the simple ranger: %s&quot;</span>, <span class="kw">round</span>(<span class="kw">sqrt</span>(res<span class="op">$</span><span class="kw">aggregate</span>()), <span class="dv">2</span>))</a>
+<a class="sourceLine" id="cb194-16" data-line-number="16">## [1] &quot;RMSE of the simple ranger: 147.48&quot;</a></code></pre></div>
+<p>Often tuning <strong>RandomForest</strong> methods does not increase predictive performances substantially.
+If time permits, it can nonetheless lead to improvements and should thus be performed.
+In this case, we resort to tune a different kind of model: <strong>Gradient Boosted Decision Trees</strong> from the package <a href="https://cran.r-project.org/package=xgboost">xgboost</a>.</p>
+</div>
+<div id="a-better-baseline-autotuner" class="section level3">
+<h3><span class="header-section-number">10.1.6</span> A better baseline: <code>AutoTuner</code></h3>
+<p>Tuning can often further improve the performance.
+In this case, we <em>tune</em> the xgboost learner in order to see whether this can improve performance.
+For the <code>AutoTuner</code> we have to specify a <strong>Termination Criterion</strong> (how long the tuning should run) a <strong>Tuner</strong> (which tuning method to use) and a <strong>ParamSet</strong> (which space we might want to search through).
+For now we do not use the <strong>zipcode</strong> column, as <a href="https://cran.r-project.org/package=xgboost">xgboost</a> cannot naturally
+deal with categorical features.
+The <strong>AutoTuner</strong> automatically performs nested cross-validation.</p>
+<div class="sourceCode" id="cb195"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb195-1" data-line-number="1"><span class="kw">set.seed</span>(444L)</a>
+<a class="sourceLine" id="cb195-2" data-line-number="2"><span class="kw">library</span>(mlr3tuning)</a>
+<a class="sourceLine" id="cb195-3" data-line-number="3"><span class="kw">library</span>(paradox)</a>
+<a class="sourceLine" id="cb195-4" data-line-number="4">lrn_xgb =<span class="st"> </span><span class="kw">lrn</span>(<span class="st">&quot;regr.xgboost&quot;</span>)</a>
+<a class="sourceLine" id="cb195-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb195-6" data-line-number="6"><span class="co"># Define the ParamSet</span></a>
+<a class="sourceLine" id="cb195-7" data-line-number="7">ps =<span class="st"> </span>ParamSet<span class="op">$</span><span class="kw">new</span>(</a>
+<a class="sourceLine" id="cb195-8" data-line-number="8">  <span class="dt">params =</span> <span class="kw">list</span>(</a>
+<a class="sourceLine" id="cb195-9" data-line-number="9">    ParamDbl<span class="op">$</span><span class="kw">new</span>(<span class="dt">id =</span> <span class="st">&quot;eta&quot;</span>, <span class="dt">lower =</span> <span class="fl">0.2</span>, <span class="dt">upper =</span> <span class="fl">.4</span>),</a>
+<a class="sourceLine" id="cb195-10" data-line-number="10">    ParamDbl<span class="op">$</span><span class="kw">new</span>(<span class="dt">id =</span> <span class="st">&quot;min_child_weight&quot;</span>, <span class="dt">lower =</span> <span class="dv">1</span>, <span class="dt">upper =</span> <span class="dv">20</span>),</a>
+<a class="sourceLine" id="cb195-11" data-line-number="11">    ParamDbl<span class="op">$</span><span class="kw">new</span>(<span class="dt">id =</span> <span class="st">&quot;subsample&quot;</span>, <span class="dt">lower =</span> <span class="fl">.7</span>, <span class="dt">upper =</span> <span class="fl">.8</span>),</a>
+<a class="sourceLine" id="cb195-12" data-line-number="12">    ParamDbl<span class="op">$</span><span class="kw">new</span>(<span class="dt">id =</span> <span class="st">&quot;colsample_bytree&quot;</span>,  <span class="dt">lower =</span> <span class="fl">.9</span>, <span class="dt">upper =</span> <span class="dv">1</span>),</a>
+<a class="sourceLine" id="cb195-13" data-line-number="13">    ParamDbl<span class="op">$</span><span class="kw">new</span>(<span class="dt">id =</span> <span class="st">&quot;colsample_bylevel&quot;</span>, <span class="dt">lower =</span> <span class="fl">.5</span>, <span class="dt">upper =</span> <span class="fl">.7</span>),</a>
+<a class="sourceLine" id="cb195-14" data-line-number="14">    ParamInt<span class="op">$</span><span class="kw">new</span>(<span class="dt">id =</span> <span class="st">&quot;nrounds&quot;</span>, <span class="dt">lower =</span> 1L, <span class="dt">upper =</span> <span class="dv">25</span>)</a>
+<a class="sourceLine" id="cb195-15" data-line-number="15">))</a>
+<a class="sourceLine" id="cb195-16" data-line-number="16"></a>
+<a class="sourceLine" id="cb195-17" data-line-number="17"><span class="co"># Define the Terminator</span></a>
+<a class="sourceLine" id="cb195-18" data-line-number="18">terminator =<span class="st"> </span>TerminatorEvaluations<span class="op">$</span><span class="kw">new</span>(<span class="dv">10</span>)</a>
+<a class="sourceLine" id="cb195-19" data-line-number="19">cv3 =<span class="st"> </span><span class="kw">rsmp</span>(<span class="st">&quot;cv&quot;</span>, <span class="dt">folds =</span> <span class="dv">3</span>)</a>
+<a class="sourceLine" id="cb195-20" data-line-number="20">at =<span class="st"> </span>AutoTuner<span class="op">$</span><span class="kw">new</span>(lrn_xgb, cv3, <span class="dt">measures =</span> <span class="st">&quot;regr.mse&quot;</span>, ps,</a>
+<a class="sourceLine" id="cb195-21" data-line-number="21">  terminator, <span class="dt">tuner =</span> TunerRandomSearch, <span class="dt">tuner_settings =</span> <span class="kw">list</span>())</a></code></pre></div>
+<div class="sourceCode" id="cb196"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb196-1" data-line-number="1">res<span class="op">$</span><span class="kw">score</span>(<span class="st">&quot;regr.mse&quot;</span>)</a>
+<a class="sourceLine" id="cb196-2" data-line-number="2"><span class="kw">sprintf</span>(<span class="st">&quot;RMSE of the tuned xgboost: %s&quot;</span>, <span class="kw">round</span>(<span class="kw">sqrt</span>(res<span class="op">$</span><span class="kw">aggregate</span>()), <span class="dv">2</span>))</a></code></pre></div>
+<p>We can obtain the resulting params in the respective splits by accessing the <a href="https://mlr3.mlr-org.com/reference/ResampleResult.html"><code>ResampleResult</code></a>.</p>
+<div class="sourceCode" id="cb197"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb197-1" data-line-number="1"><span class="kw">sapply</span>(res<span class="op">$</span>learners, <span class="cf">function</span>(x) x<span class="op">$</span>param_set<span class="op">$</span>values)</a>
+<a class="sourceLine" id="cb197-2" data-line-number="2">## $num.trees</a>
+<a class="sourceLine" id="cb197-3" data-line-number="3">## [1] 15</a>
+<a class="sourceLine" id="cb197-4" data-line-number="4">## </a>
+<a class="sourceLine" id="cb197-5" data-line-number="5">## $num.trees</a>
+<a class="sourceLine" id="cb197-6" data-line-number="6">## [1] 15</a>
+<a class="sourceLine" id="cb197-7" data-line-number="7">## </a>
+<a class="sourceLine" id="cb197-8" data-line-number="8">## $num.trees</a>
+<a class="sourceLine" id="cb197-9" data-line-number="9">## [1] 15</a></code></pre></div>
+<p><strong>NOTE:</strong> To keep runtime low, we only tune parts of the hyperparameter space of <a href="https://cran.r-project.org/package=xgboost">xgboost</a> in this example.
+Additionally, we only allow for <span class="math inline">\(10\)</span> random search iterations, which is usually to little for real-world applications.
+Nonetheless, we are able to obtain an improved performance when comparing to the <a href="https://cran.r-project.org/package=ranger">ranger</a> model.</p>
+<p>In order to further improve our results we have several options:</p>
+<ul>
+<li>Find or engineer better features</li>
+<li>Remove Features to avoid overfitting</li>
+<li>Obtain additional data (often prohibitive)</li>
+<li>Try more models</li>
+<li>Improve the tuning
+<ul>
+<li>Increase the tuning budget</li>
+<li>Enlarge the tuning search space</li>
+<li>Use a more efficient tuning algorithm</li>
+</ul></li>
+<li>Stacking and Ensembling (see <a href="pipelines.html#pipelines">Pipelines</a>)</li>
+</ul>
+<p>Below we will investigate some of those possibilities and investigate whether this improves performance.</p>
+</div>
+<div id="engineering-features-mutating-zip-codes" class="section level3">
+<h3><span class="header-section-number">10.1.7</span> Engineering Features: Mutating ZIP-Codes</h3>
+<p>In order to better cluster the zip codes, we compute a new feature: <strong>med_price</strong>:
+It computes the median price in each zip-code.
+This might help our model to improve the prediction.</p>
+<div class="sourceCode" id="cb198"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb198-1" data-line-number="1"><span class="co"># Create a new feature and append it to the task</span></a>
+<a class="sourceLine" id="cb198-2" data-line-number="2">zip_price =<span class="st"> </span>house_sales_prediction[, .(<span class="dt">med_price =</span> <span class="kw">median</span>(price)), by =<span class="st"> </span>zipcode]</a>
+<a class="sourceLine" id="cb198-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb198-4" data-line-number="4"><span class="co"># Join on the original data to match with original columns, then cbind to the task</span></a>
+<a class="sourceLine" id="cb198-5" data-line-number="5">tsk<span class="op">$</span><span class="kw">cbind</span>(house_sales_prediction[zip_price, <span class="dt">on=</span><span class="st">&quot;zipcode&quot;</span>][,<span class="st">&quot;med_price&quot;</span>])</a></code></pre></div>
+<p>Again, we run <code>resample</code> and compute the <strong>RMSE</strong>.</p>
+<div class="sourceCode" id="cb199"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb199-1" data-line-number="1">lrn_ranger =<span class="st"> </span><span class="kw">lrn</span>(<span class="st">&quot;regr.ranger&quot;</span>)</a>
+<a class="sourceLine" id="cb199-2" data-line-number="2">res =<span class="st"> </span><span class="kw">resample</span>(<span class="dt">task =</span> tsk<span class="op">$</span><span class="kw">clone</span>()<span class="op">$</span><span class="kw">filter</span>(train.idx), lrn_ranger, cv3)</a>
+<a class="sourceLine" id="cb199-3" data-line-number="3">res<span class="op">$</span><span class="kw">score</span>(<span class="st">&quot;regr.mse&quot;</span>)</a>
+<a class="sourceLine" id="cb199-4" data-line-number="4">## Warning: &#39;Automatic object creation from strings in `mlr3`&#39; is deprecated.</a>
+<a class="sourceLine" id="cb199-5" data-line-number="5">## Use &#39;msr&#39; instead.</a>
+<a class="sourceLine" id="cb199-6" data-line-number="6">## See help(&quot;Deprecated&quot;)</a>
+<a class="sourceLine" id="cb199-7" data-line-number="7">##          task task_id             learner  learner_id     resampling</a>
+<a class="sourceLine" id="cb199-8" data-line-number="8">## 1: &lt;TaskRegr&gt;   sales &lt;LearnerRegrRanger&gt; regr.ranger &lt;ResamplingCV&gt;</a>
+<a class="sourceLine" id="cb199-9" data-line-number="9">## 2: &lt;TaskRegr&gt;   sales &lt;LearnerRegrRanger&gt; regr.ranger &lt;ResamplingCV&gt;</a>
+<a class="sourceLine" id="cb199-10" data-line-number="10">## 3: &lt;TaskRegr&gt;   sales &lt;LearnerRegrRanger&gt; regr.ranger &lt;ResamplingCV&gt;</a>
+<a class="sourceLine" id="cb199-11" data-line-number="11">##    resampling_id iteration prediction regr.mse</a>
+<a class="sourceLine" id="cb199-12" data-line-number="12">## 1:            cv         1     &lt;list&gt;    22719</a>
+<a class="sourceLine" id="cb199-13" data-line-number="13">## 2:            cv         2     &lt;list&gt;    20384</a>
+<a class="sourceLine" id="cb199-14" data-line-number="14">## 3:            cv         3     &lt;list&gt;    17799</a>
+<a class="sourceLine" id="cb199-15" data-line-number="15"><span class="kw">sprintf</span>(<span class="st">&quot;RMSE of ranger with med_price: %s&quot;</span>, <span class="kw">round</span>(<span class="kw">sqrt</span>(res<span class="op">$</span><span class="kw">aggregate</span>()), <span class="dv">2</span>))</a>
+<a class="sourceLine" id="cb199-16" data-line-number="16">## [1] &quot;RMSE of ranger with med_price: 142.48&quot;</a></code></pre></div>
+</div>
+<div id="obtaining-a-sparser-model" class="section level3">
+<h3><span class="header-section-number">10.1.8</span> Obtaining a sparser model</h3>
+<p>In many cases, we might want to have a sparse model.
+For this purpose we can use a <a href="https://www.rdocumentation.org/packages/mlr3featse/topics/Filter"><code>mlr3featse::Filter</code></a> implemented in <a href="https://mlr3filters.mlr-org.com">mlr3filters</a>.
+This can prevent our learner from overfitting make it easier for humans to interpret models as fewer variables influence the resulting prediction.</p>
+<div class="sourceCode" id="cb200"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb200-1" data-line-number="1"><span class="kw">library</span>(mlr3filters)</a>
+<a class="sourceLine" id="cb200-2" data-line-number="2">filter =<span class="st"> </span>FilterMRMR<span class="op">$</span><span class="kw">new</span>()<span class="op">$</span><span class="kw">calculate</span>(tsk)</a>
+<a class="sourceLine" id="cb200-3" data-line-number="3">tsk_ftsel =<span class="st"> </span>tsk<span class="op">$</span><span class="kw">clone</span>()<span class="op">$</span><span class="kw">select</span>(<span class="kw">head</span>(<span class="kw">names</span>(filter<span class="op">$</span>scores), <span class="dv">12</span>))</a></code></pre></div>
+<p>The resulting <strong>RMSE</strong> is slightly higher, and at the same time we only use <span class="math inline">\(12\)</span> features.</p>
+<div class="sourceCode" id="cb201"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb201-1" data-line-number="1">lrn_ranger =<span class="st"> </span><span class="kw">lrn</span>(<span class="st">&quot;regr.ranger&quot;</span>)</a>
+<a class="sourceLine" id="cb201-2" data-line-number="2">res =<span class="st"> </span><span class="kw">resample</span>(<span class="dt">task =</span> tsk_ftsel<span class="op">$</span><span class="kw">clone</span>()<span class="op">$</span><span class="kw">filter</span>(train.idx), lrn_ranger, cv3)</a>
+<a class="sourceLine" id="cb201-3" data-line-number="3">res<span class="op">$</span><span class="kw">score</span>(<span class="st">&quot;regr.mse&quot;</span>)</a>
+<a class="sourceLine" id="cb201-4" data-line-number="4">## Warning: &#39;Automatic object creation from strings in `mlr3`&#39; is deprecated.</a>
+<a class="sourceLine" id="cb201-5" data-line-number="5">## Use &#39;msr&#39; instead.</a>
+<a class="sourceLine" id="cb201-6" data-line-number="6">## See help(&quot;Deprecated&quot;)</a>
+<a class="sourceLine" id="cb201-7" data-line-number="7">##          task task_id             learner  learner_id     resampling</a>
+<a class="sourceLine" id="cb201-8" data-line-number="8">## 1: &lt;TaskRegr&gt;   sales &lt;LearnerRegrRanger&gt; regr.ranger &lt;ResamplingCV&gt;</a>
+<a class="sourceLine" id="cb201-9" data-line-number="9">## 2: &lt;TaskRegr&gt;   sales &lt;LearnerRegrRanger&gt; regr.ranger &lt;ResamplingCV&gt;</a>
+<a class="sourceLine" id="cb201-10" data-line-number="10">## 3: &lt;TaskRegr&gt;   sales &lt;LearnerRegrRanger&gt; regr.ranger &lt;ResamplingCV&gt;</a>
+<a class="sourceLine" id="cb201-11" data-line-number="11">##    resampling_id iteration prediction regr.mse</a>
+<a class="sourceLine" id="cb201-12" data-line-number="12">## 1:            cv         1     &lt;list&gt;    34720</a>
+<a class="sourceLine" id="cb201-13" data-line-number="13">## 2:            cv         2     &lt;list&gt;    29056</a>
+<a class="sourceLine" id="cb201-14" data-line-number="14">## 3:            cv         3     &lt;list&gt;    25907</a>
+<a class="sourceLine" id="cb201-15" data-line-number="15"><span class="kw">sprintf</span>(<span class="st">&quot;RMSE of ranger with filtering: %s&quot;</span>, <span class="kw">round</span>(<span class="kw">sqrt</span>(res<span class="op">$</span><span class="kw">aggregate</span>()), <span class="dv">2</span>))</a>
+<a class="sourceLine" id="cb201-16" data-line-number="16">## [1] &quot;RMSE of ranger with filtering: 172.9&quot;</a></code></pre></div>
+
+</div>
+</div>
+<!-- </div> -->
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="use-cases.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="appendix.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": true,
+"facebook": false,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/mlr-org/mlr3book/edit/master/bookdown/08-use-cases/08-house-prices.Rmd",
+"text": "Edit this chapter"
+},
+"history": {
+"link": "https://github.com/mlr-org/mlr3book/commits/master/08-use-cases/08-house-prices.Rmd",
+"text": "Edit history"
+},
+"download": {},
+"toc": {
+"collapse": "section"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

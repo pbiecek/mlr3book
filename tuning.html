@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>4.1 Hyperparameter Tuning | mlr3 manual</title>
+  <meta name="description" content="4.1 Hyperparameter Tuning | mlr3 manual " />
+  <meta name="generator" content="bookdown 0.14 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="4.1 Hyperparameter Tuning | mlr3 manual" />
+  <meta property="og:type" content="book" />
+  <meta property="og:url" content="https://mlr3book.mlr-org.com" />
+  
+  
+  <meta name="github-repo" content="mlr-org/mlr3book" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="4.1 Hyperparameter Tuning | mlr3 manual" />
+  
+  
+  
+
+<meta name="author" content="The mlr-org Team" />
+
+
+<meta name="date" content="2019-10-17" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="model-optim.html"/>
+<link rel="next" href="fs.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<link href="libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+
+
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; position: absolute; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; }
+pre.numberSource a.sourceLine:empty
+  { position: absolute; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">mlr3 Manual <img src='https://raw.githubusercontent.com/mlr-org/mlr/master/man/figures/logo_navbar.png' width='30'> </a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Quickstart</a></li>
+<li class="chapter" data-level="2" data-path="introduction-and-overview.html"><a href="introduction-and-overview.html"><i class="fa fa-check"></i><b>2</b> Introduction and Overview</a></li>
+<li class="chapter" data-level="3" data-path="basics.html"><a href="basics.html"><i class="fa fa-check"></i><b>3</b> mlr3 Basics</a><ul>
+<li class="chapter" data-level="3.1" data-path="quick-r6-intro-for-beginners.html"><a href="quick-r6-intro-for-beginners.html"><i class="fa fa-check"></i><b>3.1</b> Quick R6 Intro for Beginners</a></li>
+<li class="chapter" data-level="3.2" data-path="tasks.html"><a href="tasks.html"><i class="fa fa-check"></i><b>3.2</b> Tasks</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="tasks.html"><a href="tasks.html#task-types"><i class="fa fa-check"></i><b>3.2.1</b> Task Types</a></li>
+<li class="chapter" data-level="3.2.2" data-path="tasks.html"><a href="tasks.html#task-creation"><i class="fa fa-check"></i><b>3.2.2</b> Task Creation</a></li>
+<li class="chapter" data-level="3.2.3" data-path="tasks.html"><a href="tasks.html#predefined-tasks"><i class="fa fa-check"></i><b>3.2.3</b> Predefined tasks</a></li>
+<li class="chapter" data-level="3.2.4" data-path="tasks.html"><a href="tasks.html#task-api"><i class="fa fa-check"></i><b>3.2.4</b> Task API</a><ul>
+<li class="chapter" data-level="3.2.4.1" data-path="tasks.html"><a href="tasks.html#retrieving-data"><i class="fa fa-check"></i><b>3.2.4.1</b> Retrieving Data</a></li>
+<li class="chapter" data-level="3.2.4.2" data-path="tasks.html"><a href="tasks.html#roles-rows-and-columns"><i class="fa fa-check"></i><b>3.2.4.2</b> Roles (Rows and Columns)</a></li>
+<li class="chapter" data-level="3.2.4.3" data-path="tasks.html"><a href="tasks.html#task-mutators"><i class="fa fa-check"></i><b>3.2.4.3</b> Task Mutators</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="learners.html"><a href="learners.html"><i class="fa fa-check"></i><b>3.3</b> Learners</a><ul>
+<li class="chapter" data-level="3.3.1" data-path="learners.html"><a href="learners.html#predefined-learners"><i class="fa fa-check"></i><b>3.3.1</b> Predefined Learners</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="train-predict.html"><a href="train-predict.html"><i class="fa fa-check"></i><b>3.4</b> Train &amp; Predict</a><ul>
+<li class="chapter" data-level="3.4.1" data-path="train-predict.html"><a href="train-predict.html#basic-concept"><i class="fa fa-check"></i><b>3.4.1</b> Basic concept</a><ul>
+<li class="chapter" data-level="3.4.1.1" data-path="train-predict.html"><a href="train-predict.html#creating-task-and-learner-objects"><i class="fa fa-check"></i><b>3.4.1.1</b> Creating Task and Learner Objects</a></li>
+<li class="chapter" data-level="3.4.1.2" data-path="train-predict.html"><a href="train-predict.html#setting-up-the-traintest-splits-of-the-data-split-data"><i class="fa fa-check"></i><b>3.4.1.2</b> Setting up the train/test splits of the data (#split-data)</a></li>
+<li class="chapter" data-level="3.4.1.3" data-path="train-predict.html"><a href="train-predict.html#training-the-learner"><i class="fa fa-check"></i><b>3.4.1.3</b> Training the learner</a></li>
+<li class="chapter" data-level="3.4.1.4" data-path="train-predict.html"><a href="train-predict.html#predicting"><i class="fa fa-check"></i><b>3.4.1.4</b> Predicting</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3.5" data-path="resampling.html"><a href="resampling.html"><i class="fa fa-check"></i><b>3.5</b> Resampling</a><ul>
+<li class="chapter" data-level="3.5.1" data-path="resampling.html"><a href="resampling.html#resamp-settings"><i class="fa fa-check"></i><b>3.5.1</b> Settings</a></li>
+<li class="chapter" data-level="3.5.2" data-path="resampling.html"><a href="resampling.html#resamp-inst"><i class="fa fa-check"></i><b>3.5.2</b> Instantiation</a></li>
+<li class="chapter" data-level="3.5.3" data-path="resampling.html"><a href="resampling.html#resamp-exec"><i class="fa fa-check"></i><b>3.5.3</b> Execution</a></li>
+<li class="chapter" data-level="3.5.4" data-path="resampling.html"><a href="resampling.html#custom-resampling"><i class="fa fa-check"></i><b>3.5.4</b> Custom resampling</a></li>
+</ul></li>
+<li class="chapter" data-level="3.6" data-path="benchmarking.html"><a href="benchmarking.html"><i class="fa fa-check"></i><b>3.6</b> Benchmarking</a><ul>
+<li class="chapter" data-level="3.6.1" data-path="benchmarking.html"><a href="benchmarking.html#bm-design"><i class="fa fa-check"></i><b>3.6.1</b> Design Creation</a></li>
+<li class="chapter" data-level="3.6.2" data-path="benchmarking.html"><a href="benchmarking.html#bm-exec"><i class="fa fa-check"></i><b>3.6.2</b> Execution and Aggregation of Results</a></li>
+<li class="chapter" data-level="3.6.3" data-path="benchmarking.html"><a href="benchmarking.html#converting-specific-benchmark-objects-to-resample-objects"><i class="fa fa-check"></i><b>3.6.3</b> Converting specific benchmark objects to resample objects</a></li>
+</ul></li>
+<li class="chapter" data-level="3.7" data-path="binary.html"><a href="binary.html"><i class="fa fa-check"></i><b>3.7</b> Binary classification</a><ul>
+<li class="chapter" data-level="3.7.1" data-path="binary.html"><a href="binary.html#roc-curve-and-thresholds"><i class="fa fa-check"></i><b>3.7.1</b> ROC Curve and Thresholds</a></li>
+<li class="chapter" data-level="3.7.2" data-path="binary.html"><a href="binary.html#threshold-tuning"><i class="fa fa-check"></i><b>3.7.2</b> Threshold Tuning</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="model-optim.html"><a href="model-optim.html"><i class="fa fa-check"></i><b>4</b> Model Optimization</a><ul>
+<li class="chapter" data-level="4.1" data-path="tuning.html"><a href="tuning.html"><i class="fa fa-check"></i><b>4.1</b> Hyperparameter Tuning</a><ul>
+<li class="chapter" data-level="4.1.1" data-path="tuning.html"><a href="tuning.html#the-tuninginstance-class"><i class="fa fa-check"></i><b>4.1.1</b> The <code>TuningInstance</code> Class</a></li>
+<li class="chapter" data-level="4.1.2" data-path="tuning.html"><a href="tuning.html#the-tuner-class"><i class="fa fa-check"></i><b>4.1.2</b> The <code>Tuner</code> Class</a></li>
+<li class="chapter" data-level="4.1.3" data-path="tuning.html"><a href="tuning.html#triggering-the-tuning"><i class="fa fa-check"></i><b>4.1.3</b> Triggering the Tuning</a></li>
+<li class="chapter" data-level="4.1.4" data-path="tuning.html"><a href="tuning.html#autotuner"><i class="fa fa-check"></i><b>4.1.4</b> Automating the Tuning</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="fs.html"><a href="fs.html"><i class="fa fa-check"></i><b>4.2</b> Feature Selection / Filtering</a><ul>
+<li class="chapter" data-level="4.2.1" data-path="fs.html"><a href="fs.html#fs-filter"><i class="fa fa-check"></i><b>4.2.1</b> Filters</a></li>
+<li class="chapter" data-level="4.2.2" data-path="fs.html"><a href="fs.html#fs-calc"><i class="fa fa-check"></i><b>4.2.2</b> Calculating filter values</a></li>
+<li class="chapter" data-level="4.2.3" data-path="fs.html"><a href="fs.html#fs-var-imp-filters"><i class="fa fa-check"></i><b>4.2.3</b> Variable Importance Filters</a></li>
+<li class="chapter" data-level="4.2.4" data-path="fs.html"><a href="fs.html#fs-ensemble"><i class="fa fa-check"></i><b>4.2.4</b> Ensemble Methods</a></li>
+<li class="chapter" data-level="4.2.5" data-path="fs.html"><a href="fs.html#fs-wrapper"><i class="fa fa-check"></i><b>4.2.5</b> Wrapper Methods</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="nested-resampling.html"><a href="nested-resampling.html"><i class="fa fa-check"></i><b>4.3</b> Nested Resampling</a><ul>
+<li class="chapter" data-level="4.3.1" data-path="nested-resampling.html"><a href="nested-resampling.html#introduction"><i class="fa fa-check"></i><b>4.3.1</b> Introduction</a></li>
+<li class="chapter" data-level="4.3.2" data-path="nested-resampling.html"><a href="nested-resampling.html#execution"><i class="fa fa-check"></i><b>4.3.2</b> Execution</a></li>
+<li class="chapter" data-level="4.3.3" data-path="nested-resampling.html"><a href="nested-resampling.html#rr-eval"><i class="fa fa-check"></i><b>4.3.3</b> Evaluation</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="pipelines.html"><a href="pipelines.html"><i class="fa fa-check"></i><b>5</b> Pipelines</a></li>
+<li class="chapter" data-level="6" data-path="technical.html"><a href="technical.html"><i class="fa fa-check"></i><b>6</b> Technical</a><ul>
+<li class="chapter" data-level="6.1" data-path="parallelization.html"><a href="parallelization.html"><i class="fa fa-check"></i><b>6.1</b> Parallelization</a></li>
+<li class="chapter" data-level="6.2" data-path="error-handling.html"><a href="error-handling.html"><i class="fa fa-check"></i><b>6.2</b> Error Handling</a><ul>
+<li class="chapter" data-level="6.2.1" data-path="error-handling.html"><a href="error-handling.html#encapsulation"><i class="fa fa-check"></i><b>6.2.1</b> Encapsulation</a></li>
+<li class="chapter" data-level="6.2.2" data-path="error-handling.html"><a href="error-handling.html#fallback-learners"><i class="fa fa-check"></i><b>6.2.2</b> Fallback learners</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="backends.html"><a href="backends.html"><i class="fa fa-check"></i><b>6.3</b> Database Backends</a><ul>
+<li class="chapter" data-level="6.3.1" data-path="backends.html"><a href="backends.html#example-data"><i class="fa fa-check"></i><b>6.3.1</b> Example Data</a></li>
+<li class="chapter" data-level="6.3.2" data-path="backends.html"><a href="backends.html#preprocessing-with-dplyr"><i class="fa fa-check"></i><b>6.3.2</b> Preprocessing with <code>dplyr</code></a></li>
+<li class="chapter" data-level="6.3.3" data-path="backends.html"><a href="backends.html#databackenddplyr"><i class="fa fa-check"></i><b>6.3.3</b> DataBackendDplyr</a></li>
+<li class="chapter" data-level="6.3.4" data-path="backends.html"><a href="backends.html#model-fitting"><i class="fa fa-check"></i><b>6.3.4</b> Model fitting</a></li>
+<li class="chapter" data-level="6.3.5" data-path="backends.html"><a href="backends.html#cleanup"><i class="fa fa-check"></i><b>6.3.5</b> Cleanup</a></li>
+</ul></li>
+<li class="chapter" data-level="6.4" data-path="paradox.html"><a href="paradox.html"><i class="fa fa-check"></i><b>6.4</b> Parameters (using <code>paradox</code>)</a><ul>
+<li class="chapter" data-level="6.4.1" data-path="paradox.html"><a href="paradox.html#reference-based-objects"><i class="fa fa-check"></i><b>6.4.1</b> Reference Based Objects</a></li>
+<li class="chapter" data-level="6.4.2" data-path="paradox.html"><a href="paradox.html#defining-a-parameter-space"><i class="fa fa-check"></i><b>6.4.2</b> Defining a Parameter Space</a><ul>
+<li class="chapter" data-level="6.4.2.1" data-path="paradox.html"><a href="paradox.html#single-parameters"><i class="fa fa-check"></i><b>6.4.2.1</b> Single Parameters</a></li>
+<li class="chapter" data-level="6.4.2.2" data-path="paradox.html"><a href="paradox.html#parameter-sets"><i class="fa fa-check"></i><b>6.4.2.2</b> Parameter Sets</a></li>
+<li class="chapter" data-level="6.4.2.3" data-path="paradox.html"><a href="paradox.html#vector-parameters"><i class="fa fa-check"></i><b>6.4.2.3</b> Vector Parameters</a></li>
+</ul></li>
+<li class="chapter" data-level="6.4.3" data-path="paradox.html"><a href="paradox.html#parameter-sampling"><i class="fa fa-check"></i><b>6.4.3</b> Parameter Sampling</a><ul>
+<li class="chapter" data-level="6.4.3.1" data-path="paradox.html"><a href="paradox.html#parameter-designs"><i class="fa fa-check"></i><b>6.4.3.1</b> Parameter Designs</a></li>
+<li class="chapter" data-level="6.4.3.2" data-path="paradox.html"><a href="paradox.html#grid-design"><i class="fa fa-check"></i><b>6.4.3.2</b> Grid Design</a></li>
+<li class="chapter" data-level="6.4.3.3" data-path="paradox.html"><a href="paradox.html#random-sampling"><i class="fa fa-check"></i><b>6.4.3.3</b> Random Sampling</a></li>
+<li class="chapter" data-level="6.4.3.4" data-path="paradox.html"><a href="paradox.html#generalized-sampling-the-sampler-class"><i class="fa fa-check"></i><b>6.4.3.4</b> Generalized Sampling: The <code>Sampler</code> Class</a></li>
+</ul></li>
+<li class="chapter" data-level="6.4.4" data-path="paradox.html"><a href="paradox.html#parameter-transformation"><i class="fa fa-check"></i><b>6.4.4</b> Parameter Transformation</a><ul>
+<li class="chapter" data-level="6.4.4.1" data-path="paradox.html"><a href="paradox.html#transformation-between-types"><i class="fa fa-check"></i><b>6.4.4.1</b> Transformation between Types</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6.5" data-path="logging-and-verbosity.html"><a href="logging-and-verbosity.html"><i class="fa fa-check"></i><b>6.5</b> Logging and Verbosity</a><ul>
+<li class="chapter" data-level="6.5.1" data-path="logging-and-verbosity.html"><a href="logging-and-verbosity.html#available-logging-levels"><i class="fa fa-check"></i><b>6.5.1</b> Available logging levels</a></li>
+<li class="chapter" data-level="6.5.2" data-path="logging-and-verbosity.html"><a href="logging-and-verbosity.html#global-setting"><i class="fa fa-check"></i><b>6.5.2</b> Global Setting</a></li>
+<li class="chapter" data-level="6.5.3" data-path="logging-and-verbosity.html"><a href="logging-and-verbosity.html#changing-mlr3-logging-levels"><i class="fa fa-check"></i><b>6.5.3</b> Changing mlr3 logging levels</a></li>
+</ul></li>
+<li class="chapter" data-level="6.6" data-path="mlr-mlr3-transition-guide.html"><a href="mlr-mlr3-transition-guide.html"><i class="fa fa-check"></i><b>6.6</b> mlr -&gt; mlr3 Transition Guide</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="extending.html"><a href="extending.html"><i class="fa fa-check"></i><b>7</b> Extending</a><ul>
+<li class="chapter" data-level="7.1" data-path="extending-mlr3.html"><a href="extending-mlr3.html"><i class="fa fa-check"></i><b>7.1</b> Extending mlr3</a><ul>
+<li class="chapter" data-level="7.1.1" data-path="extending-mlr3.html"><a href="extending-mlr3.html#ext-learner"><i class="fa fa-check"></i><b>7.1.1</b> Learners</a><ul>
+<li class="chapter" data-level="7.1.1.1" data-path="extending-mlr3.html"><a href="extending-mlr3.html#learner-meta-information"><i class="fa fa-check"></i><b>7.1.1.1</b> Meta-information</a></li>
+<li class="chapter" data-level="7.1.1.2" data-path="extending-mlr3.html"><a href="extending-mlr3.html#learner-train"><i class="fa fa-check"></i><b>7.1.1.2</b> Train function</a></li>
+<li class="chapter" data-level="7.1.1.3" data-path="extending-mlr3.html"><a href="extending-mlr3.html#learner-predict"><i class="fa fa-check"></i><b>7.1.1.3</b> Predict function</a></li>
+<li class="chapter" data-level="7.1.1.4" data-path="extending-mlr3.html"><a href="extending-mlr3.html#final-learner"><i class="fa fa-check"></i><b>7.1.1.4</b> Final learner</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="extending-mlr3pipelines.html"><a href="extending-mlr3pipelines.html"><i class="fa fa-check"></i><b>7.2</b> Extending mlr3pipelines</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="special-tasks.html"><a href="special-tasks.html"><i class="fa fa-check"></i><b>8</b> Special Tasks</a><ul>
+<li class="chapter" data-level="8.1" data-path="survival.html"><a href="survival.html"><i class="fa fa-check"></i><b>8.1</b> Survival Analysis</a></li>
+<li class="chapter" data-level="8.2" data-path="spatial.html"><a href="spatial.html"><i class="fa fa-check"></i><b>8.2</b> Spatial Analysis</a></li>
+<li class="chapter" data-level="8.3" data-path="ordinal.html"><a href="ordinal.html"><i class="fa fa-check"></i><b>8.3</b> Ordinal Analysis</a></li>
+<li class="chapter" data-level="8.4" data-path="functional.html"><a href="functional.html"><i class="fa fa-check"></i><b>8.4</b> Functional Analysis</a><ul>
+<li class="chapter" data-level="8.4.1" data-path="functional.html"><a href="functional.html#how-to-model-functional-data"><i class="fa fa-check"></i><b>8.4.1</b> How to model functional data?</a></li>
+</ul></li>
+<li class="chapter" data-level="8.5" data-path="multilabel.html"><a href="multilabel.html"><i class="fa fa-check"></i><b>8.5</b> Multilabel Classification</a></li>
+<li class="chapter" data-level="8.6" data-path="cost-sens.html"><a href="cost-sens.html"><i class="fa fa-check"></i><b>8.6</b> Cost-Sensitive Classification</a><ul>
+<li class="chapter" data-level="8.6.1" data-path="cost-sens.html"><a href="cost-sens.html#a-first-model"><i class="fa fa-check"></i><b>8.6.1</b> A First Model</a></li>
+<li class="chapter" data-level="8.6.2" data-path="cost-sens.html"><a href="cost-sens.html#cost-sensitive-measure"><i class="fa fa-check"></i><b>8.6.2</b> Cost-sensitive Measure</a></li>
+<li class="chapter" data-level="8.6.3" data-path="cost-sens.html"><a href="cost-sens.html#thresholding"><i class="fa fa-check"></i><b>8.6.3</b> Thresholding</a></li>
+<li class="chapter" data-level="8.6.4" data-path="cost-sens.html"><a href="cost-sens.html#threshold-tuning-1"><i class="fa fa-check"></i><b>8.6.4</b> Threshold Tuning</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="model-interpr.html"><a href="model-interpr.html"><i class="fa fa-check"></i><b>9</b> Model Interpretation with mlr3</a><ul>
+<li class="chapter" data-level="9.1" data-path="iml.html"><a href="iml.html"><i class="fa fa-check"></i><b>9.1</b> IML</a></li>
+<li class="chapter" data-level="9.2" data-path="dalex.html"><a href="dalex.html"><i class="fa fa-check"></i><b>9.2</b> Dalex</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="use-cases.html"><a href="use-cases.html"><i class="fa fa-check"></i><b>10</b> Use Cases</a><ul>
+<li class="chapter" data-level="10.1" data-path="use-case-regr-houses.html"><a href="use-case-regr-houses.html"><i class="fa fa-check"></i><b>10.1</b> House Price Prediction in King County</a><ul>
+<li class="chapter" data-level="10.1.1" data-path="use-case-regr-houses.html"><a href="use-case-regr-houses.html#exploratory-data-analysis"><i class="fa fa-check"></i><b>10.1.1</b> Exploratory Data Analysis</a><ul>
+<li class="chapter" data-level="10.1.1.1" data-path="use-case-regr-houses.html"><a href="use-case-regr-houses.html#distribution-of-the-price"><i class="fa fa-check"></i><b>10.1.1.1</b> Distribution of the price:</a></li>
+<li class="chapter" data-level="10.1.1.2" data-path="use-case-regr-houses.html"><a href="use-case-regr-houses.html#association-between-variables"><i class="fa fa-check"></i><b>10.1.1.2</b> Association between variables</a></li>
+</ul></li>
+<li class="chapter" data-level="10.1.2" data-path="use-case-regr-houses.html"><a href="use-case-regr-houses.html#splitting-into-train-and-test-data"><i class="fa fa-check"></i><b>10.1.2</b> Splitting into train and test data</a></li>
+<li class="chapter" data-level="10.1.3" data-path="use-case-regr-houses.html"><a href="use-case-regr-houses.html#a-first-model-decision-tree"><i class="fa fa-check"></i><b>10.1.3</b> A first model: Decision Tree</a></li>
+<li class="chapter" data-level="10.1.4" data-path="use-case-regr-houses.html"><a href="use-case-regr-houses.html#a-first-baseline-decision-tree"><i class="fa fa-check"></i><b>10.1.4</b> A first baseline: Decision Tree</a></li>
+<li class="chapter" data-level="10.1.5" data-path="use-case-regr-houses.html"><a href="use-case-regr-houses.html#many-trees-random-forest"><i class="fa fa-check"></i><b>10.1.5</b> Many Trees: Random Forest</a></li>
+<li class="chapter" data-level="10.1.6" data-path="use-case-regr-houses.html"><a href="use-case-regr-houses.html#a-better-baseline-autotuner"><i class="fa fa-check"></i><b>10.1.6</b> A better baseline: <code>AutoTuner</code></a></li>
+<li class="chapter" data-level="10.1.7" data-path="use-case-regr-houses.html"><a href="use-case-regr-houses.html#engineering-features-mutating-zip-codes"><i class="fa fa-check"></i><b>10.1.7</b> Engineering Features: Mutating ZIP-Codes</a></li>
+<li class="chapter" data-level="10.1.8" data-path="use-case-regr-houses.html"><a href="use-case-regr-houses.html#obtaining-a-sparser-model"><i class="fa fa-check"></i><b>10.1.8</b> Obtaining a sparser model</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="appendix.html"><a href="appendix.html"><i class="fa fa-check"></i><b>11</b> Appendix</a><ul>
+<li class="chapter" data-level="11.1" data-path="list-learners.html"><a href="list-learners.html"><i class="fa fa-check"></i><b>11.1</b> Integrated Learners</a></li>
+<li class="chapter" data-level="11.2" data-path="list-filters.html"><a href="list-filters.html"><i class="fa fa-check"></i><b>11.2</b> Integrated Filter Methods</a><ul>
+<li class="chapter" data-level="11.2.1" data-path="list-filters.html"><a href="list-filters.html#fs-filter-list"><i class="fa fa-check"></i><b>11.2.1</b> Standalone filter methods</a></li>
+<li class="chapter" data-level="11.2.2" data-path="list-filters.html"><a href="list-filters.html#fs-filter-embedded-list"><i class="fa fa-check"></i><b>11.2.2</b> Algorithms With Embedded Filter Methods</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="./">Made with <i class="fas fa-heart"></i> for open-source </a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">mlr3 manual <img src='https://raw.githubusercontent.com/mlr-org/mlr/master/man/figures/logo_navbar.png' width='50'></a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="tuning" class="section level2">
+<h2><span class="header-section-number">4.1</span> Hyperparameter Tuning</h2>
+<p>Hyperparameter tuning is supported via the extension package <a href="https://mlr3tuning.mlr-org.com">mlr3tuning</a>.
+The heart of <a href="https://mlr3tuning.mlr-org.com">mlr3tuning</a> are the R6 classes</p>
+<ul>
+<li><a href="https://mlr3tuning.mlr-org.com/reference/TuningInstance.html"><code>TuningInstance</code></a>: Describes the tuning problem and stores results.</li>
+<li><a href="https://mlr3tuning.mlr-org.com/reference/Tuner.html"><code>Tuner</code></a>: Base class for implementations of tuning algorithms.</li>
+</ul>
+<div id="the-tuninginstance-class" class="section level3">
+<h3><span class="header-section-number">4.1.1</span> The <code>TuningInstance</code> Class</h3>
+<p>The following sub-section examines the optimization of a simple classification tree on the <a href="https://mlr3.mlr-org.com/reference/mlr_tasks_pima.html"><code>Pima Indian Diabetes</code></a> data set.</p>
+<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb64-1" data-line-number="1">task =<span class="st"> </span><span class="kw">tsk</span>(<span class="st">&quot;pima&quot;</span>)</a>
+<a class="sourceLine" id="cb64-2" data-line-number="2"><span class="kw">print</span>(task)</a>
+<a class="sourceLine" id="cb64-3" data-line-number="3">## &lt;TaskClassif:pima&gt; (768 x 9)</a>
+<a class="sourceLine" id="cb64-4" data-line-number="4">## * Target: diabetes</a>
+<a class="sourceLine" id="cb64-5" data-line-number="5">## * Properties: twoclass</a>
+<a class="sourceLine" id="cb64-6" data-line-number="6">## * Features (8):</a>
+<a class="sourceLine" id="cb64-7" data-line-number="7">##   - dbl (8): age, glucose, insulin, mass, pedigree, pregnant, pressure,</a>
+<a class="sourceLine" id="cb64-8" data-line-number="8">##     triceps</a></code></pre></div>
+<p>We use the classification tree from <a href="https://cran.r-project.org/package=rpart">rpart</a> and choose a subset of the hyperparameters we want to tune.
+This is often referred to as the “tuning space”.</p>
+<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb65-1" data-line-number="1">learner =<span class="st"> </span><span class="kw">lrn</span>(<span class="st">&quot;classif.rpart&quot;</span>)</a>
+<a class="sourceLine" id="cb65-2" data-line-number="2">learner<span class="op">$</span>param_set</a>
+<a class="sourceLine" id="cb65-3" data-line-number="3">## ParamSet: </a>
+<a class="sourceLine" id="cb65-4" data-line-number="4">##              id    class lower upper levels default value</a>
+<a class="sourceLine" id="cb65-5" data-line-number="5">## 1:     minsplit ParamInt     1   Inf             20      </a>
+<a class="sourceLine" id="cb65-6" data-line-number="6">## 2:           cp ParamDbl     0     1           0.01      </a>
+<a class="sourceLine" id="cb65-7" data-line-number="7">## 3:   maxcompete ParamInt     0   Inf              4      </a>
+<a class="sourceLine" id="cb65-8" data-line-number="8">## 4: maxsurrogate ParamInt     0   Inf              5      </a>
+<a class="sourceLine" id="cb65-9" data-line-number="9">## 5:     maxdepth ParamInt     1    30             30      </a>
+<a class="sourceLine" id="cb65-10" data-line-number="10">## 6:         xval ParamInt     0   Inf             10     0</a></code></pre></div>
+<p>Here, we opt to tune two parameters: the complexity <code>cp</code> and the termination criterion <code>minsplit</code>.
+As the tuning space has to be bound, one has to set lower and upper bounds:</p>
+<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb66-1" data-line-number="1"><span class="kw">library</span>(paradox)</a>
+<a class="sourceLine" id="cb66-2" data-line-number="2">tune_ps =<span class="st"> </span>ParamSet<span class="op">$</span><span class="kw">new</span>(<span class="kw">list</span>(</a>
+<a class="sourceLine" id="cb66-3" data-line-number="3">  ParamDbl<span class="op">$</span><span class="kw">new</span>(<span class="st">&quot;cp&quot;</span>, <span class="dt">lower =</span> <span class="fl">0.001</span>, <span class="dt">upper =</span> <span class="fl">0.1</span>),</a>
+<a class="sourceLine" id="cb66-4" data-line-number="4">  ParamInt<span class="op">$</span><span class="kw">new</span>(<span class="st">&quot;minsplit&quot;</span>, <span class="dt">lower =</span> <span class="dv">1</span>, <span class="dt">upper =</span> <span class="dv">10</span>)</a>
+<a class="sourceLine" id="cb66-5" data-line-number="5">))</a>
+<a class="sourceLine" id="cb66-6" data-line-number="6">tune_ps</a>
+<a class="sourceLine" id="cb66-7" data-line-number="7">## ParamSet: </a>
+<a class="sourceLine" id="cb66-8" data-line-number="8">##          id    class lower upper levels     default value</a>
+<a class="sourceLine" id="cb66-9" data-line-number="9">## 1:       cp ParamDbl 0.001   0.1        &lt;NoDefault&gt;      </a>
+<a class="sourceLine" id="cb66-10" data-line-number="10">## 2: minsplit ParamInt 1.000  10.0        &lt;NoDefault&gt;</a></code></pre></div>
+<p>Next, we need to define how to evaluate the performance.
+For this, we need to choose a <a href="https://mlr3.mlr-org.com/reference/Resampling.html"><code>resampling strategy</code></a> and a <a href="https://mlr3.mlr-org.com/reference/Measure.html"><code>performance measure</code></a>.</p>
+<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb67-1" data-line-number="1">hout =<span class="st"> </span><span class="kw">rsmp</span>(<span class="st">&quot;holdout&quot;</span>)</a>
+<a class="sourceLine" id="cb67-2" data-line-number="2">measure =<span class="st"> </span><span class="kw">msr</span>(<span class="st">&quot;classif.ce&quot;</span>)</a></code></pre></div>
+<p>Finally, one has to determine the budget available to solve this tuning instance.
+This is done by selecting one of the available <a href="https://mlr3tuning.mlr-org.com/reference/Terminator.html"><code>Terminators</code></a>:</p>
+<ul>
+<li>Terminate after a given time (<a href="https://mlr3tuning.mlr-org.com/reference/TerminatorClockTime.html"><code>TerminatorClockTime</code></a>)</li>
+<li>Terminate after a given amount of iterations (<a href="https://mlr3tuning.mlr-org.com/reference/TerminatorEvals.html"><code>TerminatorEvals</code></a>)</li>
+<li>Terminate after a specific performance is reached (<a href="https://mlr3tuning.mlr-org.com/reference/TerminatorPerfReached.html"><code>TerminatorPerfReached</code></a>)</li>
+<li>A combination of the above in an <em>ALL</em> or <em>ANY</em> fashion, using <a href="https://mlr3tuning.mlr-org.com/reference/TerminatorCombo.html"><code>TerminatorCombo</code></a></li>
+</ul>
+<p>For this short introduction, we grant a budget of 20 evaluations and then put everything together into a <a href="https://mlr3tuning.mlr-org.com/reference/TuningInstance.html"><code>TuningInstance</code></a>:</p>
+<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb68-1" data-line-number="1"><span class="kw">library</span>(mlr3tuning)</a>
+<a class="sourceLine" id="cb68-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb68-3" data-line-number="3">evals20 =<span class="st"> </span><span class="kw">term</span>(<span class="st">&quot;evals&quot;</span>, <span class="dt">n_evals =</span> <span class="dv">20</span>)</a>
+<a class="sourceLine" id="cb68-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb68-5" data-line-number="5">instance =<span class="st"> </span>TuningInstance<span class="op">$</span><span class="kw">new</span>(</a>
+<a class="sourceLine" id="cb68-6" data-line-number="6">  <span class="dt">task =</span> task,</a>
+<a class="sourceLine" id="cb68-7" data-line-number="7">  <span class="dt">learner =</span> learner,</a>
+<a class="sourceLine" id="cb68-8" data-line-number="8">  <span class="dt">resampling =</span> hout,</a>
+<a class="sourceLine" id="cb68-9" data-line-number="9">  <span class="dt">measures =</span> measure,</a>
+<a class="sourceLine" id="cb68-10" data-line-number="10">  <span class="dt">param_set =</span> tune_ps,</a>
+<a class="sourceLine" id="cb68-11" data-line-number="11">  <span class="dt">terminator =</span> evals20</a>
+<a class="sourceLine" id="cb68-12" data-line-number="12">)</a>
+<a class="sourceLine" id="cb68-13" data-line-number="13"><span class="kw">print</span>(instance)</a>
+<a class="sourceLine" id="cb68-14" data-line-number="14">## &lt;TuningInstance&gt;</a>
+<a class="sourceLine" id="cb68-15" data-line-number="15">## * Task: &lt;TaskClassif:pima&gt;</a>
+<a class="sourceLine" id="cb68-16" data-line-number="16">## * Learner: &lt;LearnerClassifRpart:classif.rpart&gt;</a>
+<a class="sourceLine" id="cb68-17" data-line-number="17">## * Measures: classif.ce</a>
+<a class="sourceLine" id="cb68-18" data-line-number="18">## * Resampling: &lt;ResamplingHoldout&gt;</a>
+<a class="sourceLine" id="cb68-19" data-line-number="19">## * Terminator: &lt;TerminatorEvals&gt;</a>
+<a class="sourceLine" id="cb68-20" data-line-number="20">## * bm_args: list()</a>
+<a class="sourceLine" id="cb68-21" data-line-number="21">## ParamSet: </a>
+<a class="sourceLine" id="cb68-22" data-line-number="22">##          id    class lower upper levels     default value</a>
+<a class="sourceLine" id="cb68-23" data-line-number="23">## 1:       cp ParamDbl 0.001   0.1        &lt;NoDefault&gt;      </a>
+<a class="sourceLine" id="cb68-24" data-line-number="24">## 2: minsplit ParamInt 1.000  10.0        &lt;NoDefault&gt;      </a>
+<a class="sourceLine" id="cb68-25" data-line-number="25">## Archive:</a>
+<a class="sourceLine" id="cb68-26" data-line-number="26">## Empty data.table (0 rows and 11 cols): nr,batch_nr,resample_result,task_id,learner_id,resampling_id...</a></code></pre></div>
+<p>To start the tuning, we still need to select how the optimization should take place - in other words, we need to choose the <strong>optimization algorithm</strong> via the <a href="https://mlr3tuning.mlr-org.com/reference/Tuner.html"><code>Tuner</code></a> class.</p>
+</div>
+<div id="the-tuner-class" class="section level3">
+<h3><span class="header-section-number">4.1.2</span> The <code>Tuner</code> Class</h3>
+<p>The following algorithms are currently implemented in <a href="https://mlr3tuning.mlr-org.com">mlr3tuning</a>:</p>
+<ul>
+<li>Grid Search (<a href="https://mlr3tuning.mlr-org.com/reference/TunerGridSearch.html"><code>TunerGridSearch</code></a>)</li>
+<li>Random Search (<a href="https://mlr3tuning.mlr-org.com/reference/TunerRandomSearch.html"><code>TunerRandomSearch</code></a>) <span class="citation">(Bergstra and Bengio <a href="#ref-bergstra2012">2012</a>)</span></li>
+<li>Generalized Simulated Annealing (<a href="https://mlr3tuning.mlr-org.com/reference/TunerGenSA.html"><code>TunerGenSA</code></a>)</li>
+</ul>
+<p>In this example we will use a simple grid search with a grid resolution of 10:</p>
+<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb69-1" data-line-number="1">tuner =<span class="st"> </span><span class="kw">tnr</span>(<span class="st">&quot;grid_search&quot;</span>, <span class="dt">resolution =</span> <span class="dv">5</span>)</a></code></pre></div>
+<p>Since we have only numeric parameters, <a href="https://mlr3tuning.mlr-org.com/reference/TunerGridSearch.html"><code>TunerGridSearch</code></a> will create a grid of equally-sized steps between the respective upper and lower bounds.
+As we have two hyperparameters with a resolution of 5, the two-dimensional grid consists of <span class="math inline">\(5^2 = 25\)</span> configurations.
+Each configuration serves as hyperparameter setting for the classification tree and triggers a 3-fold cross validation on the task.
+All configurations will be examined by the tuner (in a random order), until either all configurations are evaluated or the <a href="https://mlr3tuning.mlr-org.com/reference/Terminator.html"><code>Terminator</code></a> signals that the budget is exhausted.</p>
+</div>
+<div id="triggering-the-tuning" class="section level3">
+<h3><span class="header-section-number">4.1.3</span> Triggering the Tuning</h3>
+<p>To start the tuning, we simply pass the <a href="https://mlr3tuning.mlr-org.com/reference/TuningInstance.html"><code>TuningInstance</code></a> to the <code>$tune()</code> method of the initialized <a href="https://mlr3tuning.mlr-org.com/reference/Tuner.html"><code>Tuner</code></a>.
+The tuner proceeds as follow:</p>
+<ol style="list-style-type: decimal">
+<li>The <a href="https://mlr3tuning.mlr-org.com/reference/Tuner.html"><code>Tuner</code></a> proposes at least one hyperparameter configuration (the <a href="https://mlr3tuning.mlr-org.com/reference/Tuner.html"><code>Tuner</code></a> and may propose multiple points to improve parallelization, which can be controlled via the setting <code>batch_size</code>).</li>
+<li>For each configuration, a <a href="https://mlr3.mlr-org.com/reference/Learner.html"><code>Learner</code></a> is fitted on <a href="https://mlr3.mlr-org.com/reference/Task.html"><code>Task</code></a> using the provided <a href="https://mlr3.mlr-org.com/reference/Resampling.html"><code>Resampling</code></a>.
+The results are combined with other results from previous iterations to a single <a href="https://mlr3.mlr-org.com/reference/BenchmarkResult.html"><code>BenchmarkResult</code></a>.</li>
+<li>The <a href="https://mlr3tuning.mlr-org.com/reference/Terminator.html"><code>Terminator</code></a> is queried if the budget is exhausted.
+If the budget is not exhausted, restart with 1) until it is.</li>
+<li>Determine the configuration with the best observed performance.</li>
+<li>Return a named list with the hyperparameter settings (<code>&quot;values&quot;</code>) and the corresponding measured performance (<code>&quot;performance&quot;</code>).</li>
+</ol>
+<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb70-1" data-line-number="1">result =<span class="st"> </span>tuner<span class="op">$</span><span class="kw">tune</span>(instance)</a>
+<a class="sourceLine" id="cb70-2" data-line-number="2"><span class="kw">print</span>(result)</a>
+<a class="sourceLine" id="cb70-3" data-line-number="3">## NULL</a></code></pre></div>
+<p>We can investigate all resamplings which where undertaken, using the <code>$archive()</code> method of the <a href="https://mlr3tuning.mlr-org.com/reference/TuningInstance.html"><code>TuningInstance</code></a>.
+Here, one just extracts the performance values and the hyperparameters:</p>
+<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb71-1" data-line-number="1">instance<span class="op">$</span><span class="kw">archive</span>(<span class="dt">unnest =</span> <span class="st">&quot;params&quot;</span>)[, <span class="kw">c</span>(<span class="st">&quot;cp&quot;</span>, <span class="st">&quot;minsplit&quot;</span>, <span class="st">&quot;classif.ce&quot;</span>)]</a>
+<a class="sourceLine" id="cb71-2" data-line-number="2">##          cp minsplit classif.ce</a>
+<a class="sourceLine" id="cb71-3" data-line-number="3">##  1: 0.07525        3     0.3008</a>
+<a class="sourceLine" id="cb71-4" data-line-number="4">##  2: 0.10000       10     0.3008</a>
+<a class="sourceLine" id="cb71-5" data-line-number="5">##  3: 0.05050        5     0.3008</a>
+<a class="sourceLine" id="cb71-6" data-line-number="6">##  4: 0.10000        3     0.3008</a>
+<a class="sourceLine" id="cb71-7" data-line-number="7">##  5: 0.02575        1     0.2734</a>
+<a class="sourceLine" id="cb71-8" data-line-number="8">##  6: 0.00100        8     0.3438</a>
+<a class="sourceLine" id="cb71-9" data-line-number="9">##  7: 0.07525        1     0.3008</a>
+<a class="sourceLine" id="cb71-10" data-line-number="10">##  8: 0.00100        1     0.3281</a>
+<a class="sourceLine" id="cb71-11" data-line-number="11">##  9: 0.02575        3     0.2734</a>
+<a class="sourceLine" id="cb71-12" data-line-number="12">## 10: 0.05050        8     0.3008</a>
+<a class="sourceLine" id="cb71-13" data-line-number="13">## 11: 0.02575       10     0.2734</a>
+<a class="sourceLine" id="cb71-14" data-line-number="14">## 12: 0.00100        3     0.3125</a>
+<a class="sourceLine" id="cb71-15" data-line-number="15">## 13: 0.07525        8     0.3008</a>
+<a class="sourceLine" id="cb71-16" data-line-number="16">## 14: 0.00100       10     0.3281</a>
+<a class="sourceLine" id="cb71-17" data-line-number="17">## 15: 0.05050        1     0.3008</a>
+<a class="sourceLine" id="cb71-18" data-line-number="18">## 16: 0.05050       10     0.3008</a>
+<a class="sourceLine" id="cb71-19" data-line-number="19">## 17: 0.07525        5     0.3008</a>
+<a class="sourceLine" id="cb71-20" data-line-number="20">## 18: 0.02575        8     0.2734</a>
+<a class="sourceLine" id="cb71-21" data-line-number="21">## 19: 0.05050        3     0.3008</a>
+<a class="sourceLine" id="cb71-22" data-line-number="22">## 20: 0.02575        5     0.2734</a></code></pre></div>
+<p>In total, the grid search evaluated 20/25 different configurations of the grid in a random order before the <a href="https://mlr3tuning.mlr-org.com/reference/Terminator.html"><code>Terminator</code></a> stopped the tuning.</p>
+<p>Now the optimized hyperparameters can take the previously created <a href="https://mlr3.mlr-org.com/reference/Learner.html"><code>Learner</code></a>, set the returned hyperparameters and <a href="train-predict.html#train-predict">train</a> it on the full dataset.</p>
+<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb72-1" data-line-number="1">learner<span class="op">$</span>param_set<span class="op">$</span>values =<span class="st"> </span>instance<span class="op">$</span>result<span class="op">$</span>params</a>
+<a class="sourceLine" id="cb72-2" data-line-number="2">learner<span class="op">$</span><span class="kw">train</span>(task)</a></code></pre></div>
+<p>The trained model could now be used to make a prediction on external data.
+Note that predicting on observations present in the <code>task</code>, is statistically bias and should be avoided, as the model has seen these observations already during tuning.
+Hence, the resulting performance measure would be over-optimistic.
+Instead, to get unbiased performance estimates for the current task, <a href="#nested-resamling">nested resampling</a> is required.</p>
+</div>
+<div id="autotuner" class="section level3">
+<h3><span class="header-section-number">4.1.4</span> Automating the Tuning</h3>
+<p>The <a href="https://mlr3tuning.mlr-org.com/reference/AutoTuner.html"><code>AutoTuner</code></a> wraps a learner and augments it with an automatic tuning for a given set of hyperparameters.
+Because the <a href="https://mlr3tuning.mlr-org.com/reference/AutoTuner.html"><code>AutoTuner</code></a> itself inherits from the <a href="https://mlr3.mlr-org.com/reference/Learner.html"><code>Learner</code></a> base class, it can be used like any other learner.
+Analogously to the previous subsection, a new classification tree learner is created.
+This classification tree learner automatically tunes the parameters <code>cp</code> and <code>minsplit</code> using an inner resampling (holdout).
+We create a terminator which allows 10 evaluations, and use a simple random search as tuning algorithm:</p>
+<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb73-1" data-line-number="1"><span class="kw">library</span>(paradox)</a>
+<a class="sourceLine" id="cb73-2" data-line-number="2"><span class="kw">library</span>(mlr3tuning)</a>
+<a class="sourceLine" id="cb73-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb73-4" data-line-number="4">learner =<span class="st"> </span><span class="kw">lrn</span>(<span class="st">&quot;classif.rpart&quot;</span>)</a>
+<a class="sourceLine" id="cb73-5" data-line-number="5">resampling =<span class="st"> </span><span class="kw">rsmp</span>(<span class="st">&quot;holdout&quot;</span>)</a>
+<a class="sourceLine" id="cb73-6" data-line-number="6">measures =<span class="st"> </span><span class="kw">msr</span>(<span class="st">&quot;classif.ce&quot;</span>)</a>
+<a class="sourceLine" id="cb73-7" data-line-number="7">tune_ps =<span class="st"> </span>ParamSet<span class="op">$</span><span class="kw">new</span>(<span class="kw">list</span>(</a>
+<a class="sourceLine" id="cb73-8" data-line-number="8">  ParamDbl<span class="op">$</span><span class="kw">new</span>(<span class="st">&quot;cp&quot;</span>, <span class="dt">lower =</span> <span class="fl">0.001</span>, <span class="dt">upper =</span> <span class="fl">0.1</span>),</a>
+<a class="sourceLine" id="cb73-9" data-line-number="9">  ParamInt<span class="op">$</span><span class="kw">new</span>(<span class="st">&quot;minsplit&quot;</span>, <span class="dt">lower =</span> <span class="dv">1</span>, <span class="dt">upper =</span> <span class="dv">10</span>)</a>
+<a class="sourceLine" id="cb73-10" data-line-number="10">))</a>
+<a class="sourceLine" id="cb73-11" data-line-number="11">terminator =<span class="st"> </span><span class="kw">term</span>(<span class="st">&quot;evals&quot;</span>, <span class="dt">n_evals =</span> <span class="dv">10</span>)</a>
+<a class="sourceLine" id="cb73-12" data-line-number="12">tuner =<span class="st"> </span><span class="kw">tnr</span>(<span class="st">&quot;random_search&quot;</span>)</a>
+<a class="sourceLine" id="cb73-13" data-line-number="13"></a>
+<a class="sourceLine" id="cb73-14" data-line-number="14">at =<span class="st"> </span>AutoTuner<span class="op">$</span><span class="kw">new</span>(</a>
+<a class="sourceLine" id="cb73-15" data-line-number="15">  <span class="dt">learner =</span> learner,</a>
+<a class="sourceLine" id="cb73-16" data-line-number="16">  <span class="dt">resampling =</span> resampling,</a>
+<a class="sourceLine" id="cb73-17" data-line-number="17">  <span class="dt">measures =</span> measures,</a>
+<a class="sourceLine" id="cb73-18" data-line-number="18">  <span class="dt">tune_ps =</span> tune_ps,</a>
+<a class="sourceLine" id="cb73-19" data-line-number="19">  <span class="dt">terminator =</span> terminator,</a>
+<a class="sourceLine" id="cb73-20" data-line-number="20">  <span class="dt">tuner =</span> tuner</a>
+<a class="sourceLine" id="cb73-21" data-line-number="21">)</a>
+<a class="sourceLine" id="cb73-22" data-line-number="22">at</a>
+<a class="sourceLine" id="cb73-23" data-line-number="23">## &lt;AutoTuner:classif.rpart.tuned&gt;</a>
+<a class="sourceLine" id="cb73-24" data-line-number="24">## * Model: -</a>
+<a class="sourceLine" id="cb73-25" data-line-number="25">## * Parameters: xval=0</a>
+<a class="sourceLine" id="cb73-26" data-line-number="26">## * Packages: rpart</a>
+<a class="sourceLine" id="cb73-27" data-line-number="27">## * Predict Type: response</a>
+<a class="sourceLine" id="cb73-28" data-line-number="28">## * Feature types: logical, integer, numeric, character, factor, ordered</a>
+<a class="sourceLine" id="cb73-29" data-line-number="29">## * Properties: importance, missings, multiclass, selected_features,</a>
+<a class="sourceLine" id="cb73-30" data-line-number="30">##   twoclass, weights</a></code></pre></div>
+<p>We can now use the learner like any other learner, calling the <code>$train()</code> and <code>$predict()</code> method.
+This time however, we pass it to <a href="https://mlr3.mlr-org.com/reference/benchmark.html"><code>benchmark()</code></a> to compare the tuner to a classification tree without tuning.
+This way, the <a href="https://mlr3tuning.mlr-org.com/reference/AutoTuner.html"><code>AutoTuner</code></a> will do its resampling for tuning on the training set of the respective split of the outer resampling.
+The learner then predicts using the test set of the outer resampling.
+This yields unbiased performance measures, as the observations in the test set have not been used during tuning or fitting of the respective learner.
+This is called nested resampling.</p>
+<p>To compare the tuned learner with the learner using its default, we can use <a href="https://mlr3.mlr-org.com/reference/benchmark.html"><code>benchmark()</code></a>:</p>
+<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb74-1" data-line-number="1">grid =<span class="st"> </span><span class="kw">benchmark_grid</span>(</a>
+<a class="sourceLine" id="cb74-2" data-line-number="2">  <span class="dt">task =</span> <span class="kw">tsk</span>(<span class="st">&quot;pima&quot;</span>),</a>
+<a class="sourceLine" id="cb74-3" data-line-number="3">  <span class="dt">learner =</span> <span class="kw">list</span>(at, <span class="kw">lrn</span>(<span class="st">&quot;classif.rpart&quot;</span>)),</a>
+<a class="sourceLine" id="cb74-4" data-line-number="4">  <span class="dt">resampling =</span> <span class="kw">rsmp</span>(<span class="st">&quot;cv&quot;</span>, <span class="dt">folds =</span> <span class="dv">3</span>)</a>
+<a class="sourceLine" id="cb74-5" data-line-number="5">)</a>
+<a class="sourceLine" id="cb74-6" data-line-number="6">bmr =<span class="st"> </span><span class="kw">benchmark</span>(grid)</a>
+<a class="sourceLine" id="cb74-7" data-line-number="7">bmr<span class="op">$</span><span class="kw">aggregate</span>(measures)</a>
+<a class="sourceLine" id="cb74-8" data-line-number="8">##    nr  resample_result task_id          learner_id resampling_id iters</a>
+<a class="sourceLine" id="cb74-9" data-line-number="9">## 1:  1 &lt;ResampleResult&gt;    pima classif.rpart.tuned            cv     3</a>
+<a class="sourceLine" id="cb74-10" data-line-number="10">## 2:  2 &lt;ResampleResult&gt;    pima       classif.rpart            cv     3</a>
+<a class="sourceLine" id="cb74-11" data-line-number="11">##    classif.ce</a>
+<a class="sourceLine" id="cb74-12" data-line-number="12">## 1:     0.2734</a>
+<a class="sourceLine" id="cb74-13" data-line-number="13">## 2:     0.2552</a></code></pre></div>
+<p>Note that we do not expect any differences here compared to the non-tuned approach for multiple reasons:</p>
+<ul>
+<li>the task is too easy</li>
+<li>the task is rather small, and thus prone to overfitting</li>
+<li>the tuning budget (10 evaluations) is small</li>
+<li><a href="https://cran.r-project.org/package=rpart">rpart</a> does not benefit that much from tuning</li>
+</ul>
+
+</div>
+</div>
+<h3>References</h3>
+<div id="refs" class="references">
+<div id="ref-bergstra2012">
+<p>Bergstra, James, and Yoshua Bengio. 2012. “Random Search for Hyper-Parameter Optimization.” <em>J. Mach. Learn. Res.</em> 13. JMLR.org: 281–305.</p>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="model-optim.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="fs.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": true,
+"facebook": false,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/mlr-org/mlr3book/edit/master/bookdown/02-optimization/02-tuning.Rmd",
+"text": "Edit this chapter"
+},
+"history": {
+"link": "https://github.com/mlr-org/mlr3book/commits/master/02-optimization/02-tuning.Rmd",
+"text": "Edit history"
+},
+"download": {},
+"toc": {
+"collapse": "section"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
